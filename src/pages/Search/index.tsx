@@ -49,11 +49,11 @@ export function SearchPage({ navigation }: Props) {
                 <HTextInput
                     value={textSearch}
                     onChangeText={onChangeTextSearch}
-                    placeholder="What are you looking for?"
+                    placeholder="O Que você está procurando?"
                 />}    
         >
             <SContent>
-                <STitle>HBO Recommends</STitle>
+                <STitle>Mais procurados</STitle>
                 {
                     movies.results.map(x => (
                         <View key={x.id} style={{ paddingBottom: 26 }}>

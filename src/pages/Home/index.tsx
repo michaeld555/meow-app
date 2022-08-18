@@ -83,7 +83,7 @@ export function HomePage({ navigation }: Props) {
         <HBody openSidebar={openSidebar}>
             <HHighlightPanel onPress={handleShowDetailItem}>
                 <HSimpleList
-                    title="Just For You"
+                    title="Selecionados para você"
                     items={items.movies}
                     renderItem={({ item }) => (
                         <HLandscapeItem 
@@ -96,8 +96,8 @@ export function HomePage({ navigation }: Props) {
             </HHighlightPanel>
 
             <HSimpleList
-                title="Iconic and Unmissible"
-                subtitle="You love them, we love them, and the hits just keep on coming"
+                title="Mais populares no app"
+                /* subtitle="You love them, we love them, and the hits just keep on coming" */
                 items={items.iconicMovies}
                 renderItem={({item}) => (
                     <HPortraitItem 
@@ -124,7 +124,7 @@ export function HomePage({ navigation }: Props) {
             />
 
             <HSimpleList
-                title="What the World Is Talking About"
+                title="Atualizações mais recentes"
                 items={items.dcMoviesTvShows}
                 onPressTitle={handleMyList}
                 renderIconTitle={<Feather name="chevron-right" size={16} color={theme.colors.white} />}
@@ -139,15 +139,15 @@ export function HomePage({ navigation }: Props) {
             />
 
             <HSimpleList
-                title="Watched to the MAX"
-                subtitle="Our TOP 10 movies and series that are trending in your country this week."
+                title="Mais assistidos da semana"
+                subtitle="Nosso TOP 10 mais assistidos nos ultimos 7 dias."
                 textAlign="center"
                 items={items.popularMoviesTvShows}
                 renderItem={({item, index}) => (
                     <HPortraitItem 
                         id={item.id} 
                         image={item.poster_path}
-                        title={index % 2 === 0 ? 'HBO' : undefined}
+
                         position={index + 1}
                         onPress={(id: number) => handleShowDetailItem(id, item.title ? 'movie' : 'tv')}
                     />
@@ -155,7 +155,7 @@ export function HomePage({ navigation }: Props) {
             />
 
             <HSimpleList
-                title="HBO Max Hubs"
+                title="Melhores avaliados"
                 items={items.movies}
                 onPressTitle={handleMyList}
                 renderIconTitle={<Feather name="chevron-right" size={16} color={theme.colors.white} />}
@@ -181,7 +181,7 @@ export function HomePage({ navigation }: Props) {
             }
 
             <HSimpleList
-                title="Iconic Collections"
+                title="Mais românticos"
                 items={items.iconicMovies}
                 renderItem={({ item }) => (
                     <HLandscapeItem 
@@ -193,7 +193,19 @@ export function HomePage({ navigation }: Props) {
             />
 
             <HSimpleList
-                title="The Ultimate Streaming Home of the DC Universe"
+                title="Melhores para maratonar"
+                items={items.dcMoviesTvShows}
+                renderItem={({ item }) => (
+                    <HPortraitItem 
+                        id={item.id} 
+                        image={item.poster_path}
+                        onPress={(id: number) => handleShowDetailItem(id, item.title ? 'movie' : 'tv')}
+                    />
+                )}
+            />
+
+            <HSimpleList
+                title="Melhores para namorar"
                 items={items.dcMoviesTvShows}
                 renderItem={({ item }) => (
                     <HPortraitItem 

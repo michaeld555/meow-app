@@ -91,11 +91,11 @@ export function HHeader({
                   )
                 }
 
-                <SRightSide>
+                { <SRightSide>
                   <TouchableOpacity onPress={() => handleOpenGitHub()} >
                       <AntDesign name="github" size={26} color={theme.colors.white} />
                     </TouchableOpacity>
-                </SRightSide>
+                </SRightSide> }
               </>
             )
           }
