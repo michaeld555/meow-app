@@ -5,4 +5,5 @@ export interface Movie extends ItemDetail {
     description: string;
     url_image: string;
     url_image2: string;
+    creation_year: string;
 }

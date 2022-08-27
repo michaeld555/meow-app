@@ -16,5 +16,6 @@ export default {
     purple_dark: '#366CD9', //azul medio
     purple_normal: '#2944D9',//azul escuro
     purple_light: '819BFD',
+    gold: '#ffd700',
   },
 };
