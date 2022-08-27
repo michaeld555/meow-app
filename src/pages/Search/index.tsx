@@ -9,9 +9,18 @@ import { Movie } from "types/movie.type";
 import { getMovies } from "services/themoviedb/movie.api";
 import { HPortraitItem } from "components/Items/HPortraitItem";
 import { RouterKey } from "routes/routes-keys";
+const axios = require('axios');
 
 interface Props extends DrawerContentComponentProps {
 }
+
+const token = '44|0x21WPgIUyHWYhFnOLzSjCR78Qp9FCr7Hhjr1o7n';
+
+    const meowApi = axios.create({
+        baseURL: 'https://meowfansub.me/api/',
+        headers: { Authorization: `Bearer ${token}` },
+        params: {}
+      });
 
 
 export function SearchPage({ navigation }: Props) {
@@ -19,10 +28,21 @@ export function SearchPage({ navigation }: Props) {
     const [movies, setMovies] = useState<PageableTheMovieDb<Movie>>(new PageableTheMovieDb());
 
     const [textSearch, setTextSearch] = useState<string>();
+
+    const [MorePopular, setMorePopular] = useState([]);
     
     function openSidebar() {
         navigation.openDrawer();
     }
+
+    React.useEffect( () => {
+        meowApi.get( 
+              'title?type=more_popular',
+            ).then(function (response: any) {
+                setMorePopular(response.data.data)
+            }).catch(console.log);
+
+    }, [])
 
     function onChangeTextSearch(text: string){
         console.log(text);
@@ -40,7 +60,7 @@ export function SearchPage({ navigation }: Props) {
     function handleShowDetailItem(id: number, type: 'movie' | 'tv' = 'movie'){
         navigation.navigate(RouterKey.DetailItemPage, { id, type });
     }
-
+        //TODO: search aqui
     return (
         <HBody 
             openSidebar={openSidebar} 
@@ -55,11 +75,11 @@ export function SearchPage({ navigation }: Props) {
             <SContent>
                 <STitle>Mais procurados</STitle>
                 {
-                    movies.results.map(x => (
-                        <View key={x.id} style={{ paddingBottom: 26 }}>
+                    MorePopular.map(x => (
+                        <View key={x} style={{ paddingBottom: 26 }}>
                             <HPortraitItem 
-                                id={x.id}
-                                image={x.poster_path}
+                                id={x}
+                                image={x}
                                 onPress={handleShowDetailItem}
                             />
                         </View>

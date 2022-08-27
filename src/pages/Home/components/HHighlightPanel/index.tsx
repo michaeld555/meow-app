@@ -1,78 +1,75 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { TouchableHighlight } from "react-native-gesture-handler";
-import { getPopularMovies } from "services/themoviedb/movie.api";
-import { getPopularTVShows } from "services/themoviedb/tvshow.api";
 import { Movie } from "types/movie.type";
-import { TVShow } from "types/tvshow.type";
 import { HBottomGradientBackground } from "../../../../components/HBottomGrandientBackground";
 import { HTopGrandientBackground } from "../../../../components/HTopGrandientBackground";
 import { HHeaderGrandientBackground } from "../HHeaderGrandientBackground";
 import { SContainer, SHighlightSubtitle, SHighlightTitle, SImageBackground } from "./styles";
+const axios = require('axios');
 
 interface Props {
     children: ReactNode;
-    onPress?: (id: number, type?: 'movie' | 'tv') => void;
+    onPress?: (id: number) => void;
 }
 
 const highlightType = ['movie', 'tv'];
 
+const token = '44|0x21WPgIUyHWYhFnOLzSjCR78Qp9FCr7Hhjr1o7n';
+
+    const meowApi = axios.create({
+        baseURL: 'https://meowfansub.me/api/',
+        headers: { Authorization: `Bearer ${token}` },
+        params: {}
+      });
+
 export function HHighlightPanel({ children, onPress }: Props){
 
-    const [movie, setMovie] = useState<Movie>();
-    const [tvShow, setTvShow] = useState<TVShow>();
+    const [Header, setHeader] = useState<Movie>();
 
-    async function getPopularHighlightData(){
-        const type = highlightType[Math.floor(Math.random() * highlightType.length)];
-        const items = await (type === 'movie' ? getPopularMovies() : getPopularTVShows());
+    React.useEffect( () => {
+        meowApi.get( 
+              'title?type=header',
+            ).then(function (response: any) {
+              setHeader(response.data.data[0])
+            }).catch(console.log);
 
-        const item = items.results[Math.floor(Math.random() * items.results.length)];
-        
-        if(type === 'movie') setMovie(item as Movie);
-        else setTvShow(item as TVShow);
-    }
+    }, [])
+
+  
 
     function getImage(){
 
         // Exibir imagem de carregando
-        if(!movie && !tvShow) return {};
+        if(!Header) return {};
 
         return {
-            uri: `http://bancodeseries.com.br/images/posters/15518.jpg` // TODO: parte header da api aqui
+            uri: `${Header.url_image}` // TODO: parte header da api aqui
         }
         //https://image.tmdb.org/t/p/w500${!!movie ? movie.poster_path : tvShow?.poster_path}
     }
 
     function getOverview(){
 
-        if(!!movie && movie.overview.length > 80) {
-            return `${movie.overview.substring(0, 80)}...`
+        if(!!Header && Header.description.length > 80) {
+            return `${Header.description.substring(0, 80)}...`
         }
-
-        if(!!tvShow && tvShow.overview.length > 80) {
-            return `${tvShow.overview.substring(0, 80)}...`
-        }
-
-        return '';
     }
 
-    useEffect(() => {
-        getPopularHighlightData();
-    }, []);
 
     return (
         <SContainer>
 
-            <TouchableHighlight onPress={() => !!onPress && onPress(!!movie ? movie.id : (!!tvShow ? tvShow.id : 0), !!movie ? 'movie' : 'tv')}>
+            <TouchableHighlight onPress={() => !!onPress && onPress(!!Header ? Header.id : 0)}>
                 <SImageBackground source={getImage()}>
                     <HHeaderGrandientBackground />
                     <HBottomGradientBackground>
 
                         <SHighlightTitle>
-                            {!!movie ? movie.title : tvShow?.name}
+                            {!!Header ? Header.name : ''}
                         </SHighlightTitle>
 
                         <SHighlightSubtitle>
-                            {getOverview()}
+                        {getOverview()}
                         </SHighlightSubtitle>
                         
                     </HBottomGradientBackground>

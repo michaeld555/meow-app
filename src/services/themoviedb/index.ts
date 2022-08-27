@@ -12,6 +12,20 @@ const theMovieDbApi = axios.create({
   }
 });
 
+//const token = '44|0x21WPgIUyHWYhFnOLzSjCR78Qp9FCr7Hhjr1o7n';
+//
+//const meowApi = axios.create({
+//  baseURL: 'https://meowfansub.me/api/',
+//  headers: { Authorization: `Bearer ${token}` },
+//  params: {}
+//});
+
+//meowApi.get( 
+//  'https://meowfansub.me/api/title/10',
+//).then(function (response) {
+//console.log(response.data.data[0])
+//}).catch(console.log);
+
 const patternId = /[\d+]*[\?]/
 
 theMovieDbApi.interceptors.response.use((response) => {

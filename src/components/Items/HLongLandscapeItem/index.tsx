@@ -11,7 +11,7 @@ export function HLongLandscapeItem({
     return (
         <TouchableOpacity onPress={() => !!onPress && onPress(id)}>
             <View style={{ paddingBottom: !!title ? 10 : 0 }}>
-                <SImage source={{ uri: `https://image.tmdb.org/t/p/w500${image}` }} />
+                <SImage source={{ uri: `${image}` }} />
                 {
                     !!title && <STitle>{title}</STitle>
                 }
