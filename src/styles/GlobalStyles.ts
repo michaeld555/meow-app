@@ -1,7 +1,7 @@
 export default {
  colors: {
-    black_0: '#000000',
-    black_1: '#0f0f0f',
+    black_0: '#141414',//cor escura
+    black_1: '#0f0f0f',//barra de baixo
     black_2: '#0f0f0fe0',
     yellow: {
       500: '#FFAC00',

@@ -37,9 +37,9 @@ export function HHighlightPanel({ children, onPress }: Props){
         if(!movie && !tvShow) return {};
 
         return {
-            uri: `https://image.tmdb.org/t/p/w500${!!movie ? movie.poster_path : tvShow?.poster_path}`
+            uri: `http://bancodeseries.com.br/images/posters/15518.jpg` // TODO: parte header da api aqui
         }
-        
+        //https://image.tmdb.org/t/p/w500${!!movie ? movie.poster_path : tvShow?.poster_path}
     }
 
     function getOverview(){

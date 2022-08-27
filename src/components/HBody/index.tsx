@@ -22,7 +22,7 @@ export function HBody({
   openSidebar, 
   goBack,
   useSafeAreaHeader = false,
-  showHeader = true,
+  showHeader = true,//TODO:mostra a header
   customHeaderContent,
   title,
   ...rest
@@ -58,10 +58,10 @@ export function HBody({
     const scrollPosition = event.nativeEvent.contentOffset.y;
 
     if(scrollPosition > 400) {
-      setShowBackgroundAndTextHeader(true);
+      //setShowBackgroundAndTextHeader(true);////////////////////////////
     }
     else {    
-      setShowBackgroundAndTextHeader(false);
+      //setShowBackgroundAndTextHeader(false);
     }
 
   }

@@ -23,7 +23,7 @@ export function HHighlightItem({
     return (
             <View style={{ paddingVertical: 30 }}>
                 <TouchableOpacity onPress={() => !!onPress && onPress(id)}>
-                    <SImage source={{ uri: `https://image.tmdb.org/t/p/w500${image}` }} />
+                    <SImage source={{ uri: `https://image.tmdb.org/t/p/original/87U6PcPJlbOitrJs0uf0i6PyVRk.jpg` }} />
                 </TouchableOpacity>
 
                 {
@@ -32,9 +32,11 @@ export function HHighlightItem({
 
                 { !!subtitle && <SSubtitleList style={{ textAlign: textAlign }}>{safeSubtitle}</SSubtitleList>}
                 
-                <SButtonContainer >
+                {/* <SButtonContainer >
                     <HPrimaryButton title="Explore hub" width={180} onPress={() => !!onPress && onPress(id)} />
-                </SButtonContainer>
+                </SButtonContainer> */}
             </View>
+            //https://image.tmdb.org/t/p/w500${image}
+            //TODO: painel do centro trocar depois para api
     )
 }

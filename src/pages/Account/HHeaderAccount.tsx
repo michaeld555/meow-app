@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import styled from 'styled-components/native';
 import theme from 'styles/GlobalStyles';
 
+//TODO: header do configuracao
 export function HHeaderAccount(){
     return (
         <SHeaderAccountContainer>
@@ -12,7 +13,7 @@ export function HHeaderAccount(){
             </TouchableOpacity>
             <SAccountContainer>
 
-                <SPicture source={{ uri: 'https://avatars.githubusercontent.com/u/30120305?s=400&u=2c33a6777ec253d664a59108230924e555c89070&v=4' }} />
+                <SPicture source={require("assets/logo.png")} />
                 
             </SAccountContainer>
             <SSpacing />

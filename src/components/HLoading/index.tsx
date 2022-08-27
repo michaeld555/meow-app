@@ -5,6 +5,7 @@ import theme from 'styles/GlobalStyles';
 import { SLogo, SSpacing } from "./styles";
 import { HLoadingDots } from "components/HLoadingDots";
 
+//TODO: testar animacao com icon da meow
 export function HLoading(){
     return (
         <LinearGradient

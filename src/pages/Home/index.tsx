@@ -68,7 +68,7 @@ export function HomePage({ navigation }: Props) {
     }
     
     function handleMyList(){
-        console.log('navigate to my list')
+        //TODO: Futura navegacao para aba de minha lista console.log('navigate to my list')
     }
 
     function handleShowDetailItem(id: number, type: 'movie' | 'tv' = 'movie'){
@@ -96,7 +96,7 @@ export function HomePage({ navigation }: Props) {
             </HHighlightPanel>
 
             <HSimpleList
-                title="Mais populares no app"
+                title="Mais populares na meow"
                 /* subtitle="You love them, we love them, and the hits just keep on coming" */
                 items={items.iconicMovies}
                 renderItem={({item}) => (
@@ -109,7 +109,7 @@ export function HomePage({ navigation }: Props) {
             />
 
             <HSimpleList
-                title="MyList"
+                title="Sua lista"
                 items={items.popularMoviesTvShows}
                 onPressTitle={handleMyList}
                 renderIconTitle={<Feather name="chevron-right" size={16} color={theme.colors.white} />}
@@ -181,7 +181,7 @@ export function HomePage({ navigation }: Props) {
             }
 
             <HSimpleList
-                title="Mais românticos"
+                title="Meow Indica"
                 items={items.iconicMovies}
                 renderItem={({ item }) => (
                     <HLandscapeItem 
@@ -193,7 +193,7 @@ export function HomePage({ navigation }: Props) {
             />
 
             <HSimpleList
-                title="Melhores para maratonar"
+                title="Melhores Filmes"
                 items={items.dcMoviesTvShows}
                 renderItem={({ item }) => (
                     <HPortraitItem 
@@ -205,7 +205,19 @@ export function HomePage({ navigation }: Props) {
             />
 
             <HSimpleList
-                title="Melhores para namorar"
+                title="Melhores para maratonar"
+                items={items.iconicMovies}
+                renderItem={({ item }) => (
+                    <HLandscapeItem 
+                        id={item.id} 
+                        image={item.backdrop_path}
+                        onPress={handleShowDetailItem}
+                    />
+                )}
+            />
+
+            <HSimpleList
+                title="Melhores Curtas"
                 items={items.dcMoviesTvShows}
                 renderItem={({ item }) => (
                     <HPortraitItem 

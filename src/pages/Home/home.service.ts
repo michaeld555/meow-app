@@ -20,7 +20,7 @@ export async function getIconicMoviesData() {
 }
 
 export async function getDcMoviesTvShowsData() {
-    const keys = ['dc', 'dc comics', 'dc extended universe', 'dceu'];
+    const keys = ['gay love', 'college student', 'boys love', 'university'];
     const moviesData = (await getMoviesByKeywords(keys)).results.slice(0, 5);
     const tvShowsData = (await getTvShowsByKeywords(keys)).results.slice(0, 5);
     const data = [...moviesData, ...tvShowsData].sort(() => Math.random() - 0.5);

@@ -49,9 +49,9 @@ export function HHeader({
     };
   }); 
 
-  function handleOpenGitHub(){
+ /*  function handleOpenGitHub(){
     Linking.openURL('https://github.com/mcosta21/hbo-max-react-native-clone');
-  }
+  } */
 
   return (
     <SContainer>
@@ -65,7 +65,7 @@ export function HHeader({
           {
             !customContent && (
               <>
-                <SLeftSide>
+                {/* <SLeftSide>
                   {
                     !!openSidebar && (
                       <TouchableOpacity onPress={() => openSidebar()}>
@@ -81,7 +81,7 @@ export function HHeader({
                       </TouchableOpacity>
                     )
                   }
-                </SLeftSide>
+                </SLeftSide>  //TODO: header de cima comentada
 
                 {
                   !!title ? (
@@ -95,7 +95,7 @@ export function HHeader({
                   <TouchableOpacity onPress={() => handleOpenGitHub()} >
                       <AntDesign name="github" size={26} color={theme.colors.white} />
                     </TouchableOpacity>
-                </SRightSide> }
+                </SRightSide> } */}
               </>
             )
           }

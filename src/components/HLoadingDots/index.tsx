@@ -26,7 +26,7 @@ export function HLoadingDots({ ...rest }: Props){
 
     useEffect(() => {
         opacityDot1.value = applyEffect(100);
-        opacityDot2.value = applyEffect(200);
+        opacityDot2.value = applyEffect(200);//TODO: Mudar bolinha de carregamento
         opacityDot3.value = applyEffect(300);
     }, []);
 
