@@ -36,31 +36,46 @@ export function SearchPage({ navigation }: Props) {
     }
 
     React.useEffect( () => {
-        meowApi.get( 
+        /* meowApi.get( 
               'title?type=more_popular',
             ).then(function (response: any) {
-                setMorePopular(response.data.data)
-            }).catch(console.log);
+                setMovies(response.data)
+            }).catch(console.log); */
+            popularTitles();
 
     }, [])
 
     function onChangeTextSearch(text: string){
-        console.log(text);
+        if(text.trim() != ''){
+            console.log(text);
+            searchTitles(text);
+        }
+        else {
+            popularTitles();
+        }
     }
 
-    useEffect(() => {
-        getMoviesData();
-    }, [textSearch]);
+    function searchTitles(title: string) {
+        meowApi.get( 
+            `search/${title}`,
+          ).then(function (response: any) {
+              setMovies(response.data)
+          }).catch(console.log);
+    }
 
-    async function getMoviesData() {
-        const data = await getMovies();
-        setMovies(data);
+    function popularTitles() {
+        meowApi.get( 
+            'title?type=more_popular',
+          ).then(function (response: any) {
+              setMovies(response.data)
+          }).catch(console.log);
     }
 
     function handleShowDetailItem(id: number, type: 'movie' | 'tv' = 'movie'){
         navigation.navigate(RouterKey.DetailItemPage, { id, type });
     }
         //TODO: search aqui
+        console.log(MorePopular.length)
     return (
         <HBody 
             openSidebar={openSidebar} 
@@ -75,16 +90,19 @@ export function SearchPage({ navigation }: Props) {
             <SContent>
                 <STitle>Mais procurados</STitle>
                 {
-                    MorePopular.map(x => (
-                        <View key={x} style={{ paddingBottom: 26 }}>
-                            <HPortraitItem 
-                                id={x}
-                                image={x}
-                                onPress={handleShowDetailItem}
-                            />
-                        </View>
-                        
-                    ))
+                    
+                    movies.data.map((x) => (
+                       <View key={x.id} style={{ paddingBottom: 26 }}>
+                           <HPortraitItem 
+                               id={x.id}
+                               image={x.url_image}
+                               onPress={handleShowDetailItem}
+                           />
+                       </View>
+                       
+                    ) )
+
+
                 }
 
             </SContent>

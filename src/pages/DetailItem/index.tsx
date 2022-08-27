@@ -74,7 +74,7 @@ export function DetailItem({ route }: Props){
     }
 
     function getTitle() {
-        return (item as Movie)?.title || (item as TVShow)?.name;
+        return (item as Movie)?.name || (item as TVShow)?.name;
     }
     
     function handleChangeDetailItem(id: number, type: string){
