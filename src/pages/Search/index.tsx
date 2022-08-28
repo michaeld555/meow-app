@@ -6,21 +6,13 @@ import { HTextInput } from "components/HTextInput";
 import { SContent, STitle } from "./styles";
 import { PageableTheMovieDb } from "types/global.type";
 import { Movie } from "types/movie.type";
-import { getMovies } from "services/themoviedb/movie.api";
 import { HPortraitItem } from "components/Items/HPortraitItem";
 import { RouterKey } from "routes/routes-keys";
+import { meowApi } from "../../services/";
 const axios = require('axios');
 
 interface Props extends DrawerContentComponentProps {
 }
-
-const token = '44|0x21WPgIUyHWYhFnOLzSjCR78Qp9FCr7Hhjr1o7n';
-
-    const meowApi = axios.create({
-        baseURL: 'https://meowfansub.me/api/',
-        headers: { Authorization: `Bearer ${token}` },
-        params: {}
-      });
 
 
 export function SearchPage({ navigation }: Props) {

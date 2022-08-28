@@ -3,17 +3,14 @@ import { HBody } from 'components/HBody';
 import { HBottomGradientBackground } from 'components/HBottomGrandientBackground';
 import { HTopGrandientBackground } from 'components/HTopGrandientBackground';
 import React, { useEffect, useState } from "react";
-import { getMovieById, getPopularMovies } from 'services/themoviedb/movie.api';
 import { SAdultBadge, SBannerItem, SButtonsContainer, SCircle, SContentItem, SImageBackground, SItemInfo, SMoreOptions, SNormalBadge, SSubtitle, STitle, STitleBadge } from './styles';
 import theme from 'styles/GlobalStyles';
-import { TVShow } from 'types/tvshow.type';
 import { Movie } from 'types/movie.type';
-import { getPopularTVShows, getTvShowById } from 'services/themoviedb/tvshow.api';
 import { HSimpleList } from 'components/HSimpleList';
 import { HPortraitItem } from 'components/Items/HPortraitItem';
 import { RouterKey } from 'routes/routes-keys';
 import { useNavigation } from '@react-navigation/native';
-const axios = require('axios');
+import { meowApi } from "../../services/";
 
 interface Props {
     route: {
@@ -22,14 +19,6 @@ interface Props {
         }
     };
 }
-
-const token = '44|0x21WPgIUyHWYhFnOLzSjCR78Qp9FCr7Hhjr1o7n';
-
-const meowApi = axios.create({
-    baseURL: 'https://meowfansub.me/api/',
-    headers: { Authorization: `Bearer ${token}` },
-    params: {}
-  });
 
 export function DetailItem({ route }: Props){
 

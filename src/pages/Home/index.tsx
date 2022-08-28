@@ -15,25 +15,13 @@ import theme from 'styles/GlobalStyles';
 import { Movie } from "types/movie.type";
 import { TVShow } from 'types/tvshow.type';
 import { HHighlightPanel } from "./components/HHighlightPanel";
-import { getDcMoviesTvShowsData, getIconicMoviesData, getMoviesData, getPopularMoviesTvShowsData } from './home.service';
-const axios = require('axios');
+import { meowApi } from "../../services/";
 
 interface Props extends DrawerContentComponentProps {
 }
 
-class ItemsHomeData {
-    public movies: Array<Movie> = [];
-    public popularMoviesTvShows: Array<Movie | TVShow> = [];
-    public iconicMovies: Array<Movie> = [];
-    public dcMoviesTvShows: Array<Movie | TVShow> = [];
-
-    public isLoading() {
-        return Object.values(this).some(x => x === null || x.length === 0);
-    }
-}
 export function HomePage({ navigation }: Props) {
 
-    const [items, setItems] = useState<ItemsHomeData>(new ItemsHomeData());
     const [highlightMovie, setHighlightMovie] = useState<Movie>();
     const [ForYou, setForYou] = useState([]);
     const [MyList, setMyList] = useState([]);
@@ -46,14 +34,6 @@ export function HomePage({ navigation }: Props) {
     const [Movies, setMovies] = useState([]);
     const [BestWatch, setBestWatch] = useState([]);
     const [Curtas, setCurtas] = useState([]);
-
-    const token = '44|0x21WPgIUyHWYhFnOLzSjCR78Qp9FCr7Hhjr1o7n';
-
-    const meowApi = axios.create({
-        baseURL: 'https://meowfansub.me/api/',
-        headers: { Authorization: `Bearer ${token}` },
-        params: {}
-      });
 
     React.useEffect( () => {
         meowApi.get( 
@@ -152,47 +132,15 @@ export function HomePage({ navigation }: Props) {
         navigation.openDrawer();
     }
 
-    useEffect(() => {
-        getItems();
-    }, []);
-
-    async function getItems(){
-        
-        const [
-            movies, 
-            popularMoviesTvShows,
-            iconicMovies,
-            dcMoviesTvShows
-        ] = await Promise.all([
-            getMoviesData(),
-            getPopularMoviesTvShowsData(),
-            getIconicMoviesData(),
-            getDcMoviesTvShowsData()
-        ]);
-        
-        const data = new ItemsHomeData();
-        data.movies = movies;
-        data.popularMoviesTvShows = popularMoviesTvShows;
-        data.iconicMovies = iconicMovies;
-        data.dcMoviesTvShows = dcMoviesTvShows;
-
-        setItems(data);
-        setHighlightMovie(data.movies[Math.floor(Math.random() * data.movies.length)]);
-    }
+    // return <HLoading /> //// loading
     
     function handleMyList(){
         //TODO: Futura navegacao para aba de minha lista console.log('navigate to my list')
     }
 
-    function handleShowDetailItem(id: number, type: 'movie' | 'tv' = 'movie'){
-        navigation.navigate(RouterKey.DetailItemPage, { id, type });
+    function handleShowDetailItem(id: number){
+        navigation.navigate(RouterKey.DetailItemPage, { id});
     }
-
-    if(items.isLoading()) {
-        return <HLoading />
-    }
-
-        console.log(ForYou.length)
 
     return (
         <HBody openSidebar={openSidebar}>
@@ -212,7 +160,6 @@ export function HomePage({ navigation }: Props) {
 
             <HSimpleList
                 title="Mais populares na meow"
-                /* subtitle="You love them, we love them, and the hits just keep on coming" */
                 items={MorePopular}
                 renderItem={({item}) => (
                     <HPortraitItem 
@@ -233,7 +180,7 @@ export function HomePage({ navigation }: Props) {
                         id={item.id} 
                         image={item.url_image3}
                         title={item.name}
-                        onPress={(id: number) => handleShowDetailItem(id, item.name ? 'movie' : 'tv')}
+                        onPress={(id: number) => handleShowDetailItem(id)}
                     />
                 )}
             />
@@ -248,7 +195,7 @@ export function HomePage({ navigation }: Props) {
                         id={item.id} 
                         image={item.url_image2}
                         title={item.name}
-                        onPress={(id: number) => handleShowDetailItem(id, item.title ? 'movie' : 'tv')}
+                        onPress={(id: number) => handleShowDetailItem(id)}
                     />
                 )}
             />
@@ -264,7 +211,7 @@ export function HomePage({ navigation }: Props) {
                         image={item.url_image}
 
                         position={index + 1}
-                        onPress={(id: number) => handleShowDetailItem(id, item.name ? 'movie' : 'tv')}
+                        onPress={(id: number) => handleShowDetailItem(id)}
                     />
                 )}
             />
@@ -312,7 +259,7 @@ export function HomePage({ navigation }: Props) {
                     <HPortraitItem 
                         id={item.id} 
                         image={item.url_image}
-                        onPress={(id: number) => handleShowDetailItem(id, item.name ? 'movie' : 'tv')}
+                        onPress={(id: number) => handleShowDetailItem(id)}
                     />
                 )}
             />
@@ -336,7 +283,7 @@ export function HomePage({ navigation }: Props) {
                     <HPortraitItem 
                         id={item.id} 
                         image={item.url_image}
-                        onPress={(id: number) => handleShowDetailItem(id, item.title ? 'movie' : 'tv')}
+                        onPress={(id: number) => handleShowDetailItem(id)}
                     />
                 )}
             />

@@ -12,8 +12,6 @@ interface Props {
     onPress?: (id: number) => void;
 }
 
-const highlightType = ['movie', 'tv'];
-
 const token = '44|0x21WPgIUyHWYhFnOLzSjCR78Qp9FCr7Hhjr1o7n';
 
     const meowApi = axios.create({
@@ -45,7 +43,7 @@ export function HHighlightPanel({ children, onPress }: Props){
         return {
             uri: `${Header.url_image}` // TODO: parte header da api aqui
         }
-        //https://image.tmdb.org/t/p/w500${!!movie ? movie.poster_path : tvShow?.poster_path}
+       
     }
 
     function getOverview(){

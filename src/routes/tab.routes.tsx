@@ -54,7 +54,7 @@ export function TabRoutes() {
             tabBarIcon: ({ size, focused }) => {
               return (
                 <MaterialCommunityIcons 
-                  name="home-variant-outline" 
+                  name="home" 
                   size={size} 
                   color={focused ? theme.colors.purple_normal : theme.colors.white }
                 />
@@ -75,6 +75,26 @@ export function TabRoutes() {
               return (
                 <Feather 
                   name="search" 
+                  size={size - 2} 
+                  color={focused ? theme.colors.purple_normal : theme.colors.white }
+                />
+              );
+            }
+          }}
+        />
+        <Screen 
+          name="MyList" 
+          component={SearchPage} 
+          listeners={{
+            tabPress: () => {
+              setCurrentTab(1, currentTabIndex);
+            },
+          }}
+          options={{
+            tabBarIcon: ({ size, focused }) => {
+              return (
+                <Feather 
+                  name="list" 
                   size={size - 2} 
                   color={focused ? theme.colors.purple_normal : theme.colors.white }
                 />

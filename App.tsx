@@ -16,7 +16,7 @@ export default function App() {
   });
 
   if (!fontsLoaded) {
-    return <HLoading />;
+    //return <HLoading />;
   }
 
   return (
