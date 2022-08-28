@@ -1,37 +1,33 @@
 import axios from 'axios';
+import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+//const [token, setToken] = useState([]);
 
 const saveLogin = async (value: any) => {
   try {
-    const jsonValue = JSON.stringify(value)
-    await AsyncStorage.setItem('UserData', jsonValue)
+    await AsyncStorage.setItem('userData', value)
   } catch (e) {
-      alert(e);
+    // saving error
   }
+
 }
 
 
-const getLogin = async () => {
+const getLogin = () => {
   try {
-    const jsonValue = await AsyncStorage.getItem('UserData')
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
-    
+    const value = AsyncStorage.getItem('userData')
+    if(value !== null) {
+      console.log(value)
+      return true;
+    }
+    else{
+      return false;
+    }
   } catch(e) {
-    alert(e);
+    // error reading value
   }
 }
-
-const getToken= async () => {
-  try {
-    const jsonValue: any = await AsyncStorage.getItem('UserData')
-    
-    return jsonValue != null ? JSON.parse(jsonValue) : null;
-    
-  } catch(e) {
-    alert(e);
-  }
-}
-
 
 
 const token = '284|yJvbEf835mj1AG2qV8Gz4PKDvI01BL0gzhzJdORs';

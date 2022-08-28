@@ -40,10 +40,8 @@ export function SignInPage({ navigation }: Props) {
   function login(date: any){
     if(date.success == true){
       //alert(date.data.token)
-      saveLogin(date.data);
+      saveLogin(date.data.token);
       navigation.navigate(RouterKey.PrivateRoutes);
-      const teste = getLogin();
-      //alert(teste)
     }
     else {
       alert(date.message)
