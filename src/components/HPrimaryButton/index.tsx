@@ -1,5 +1,6 @@
 import { TouchableOpacityProps } from "react-native";
 import { SLinearGradient, SText, STouchableOpacity } from "./styles";
+import { HLoadingDots } from "components/HLoadingDots";
 
 interface Props extends TouchableOpacityProps {
     width?: number;

@@ -11,6 +11,7 @@ import { HPortraitItem } from 'components/Items/HPortraitItem';
 import { RouterKey } from 'routes/routes-keys';
 import { useNavigation } from '@react-navigation/native';
 import { meowApi } from "../../services/";
+import {TouchableOpacity} from 'react-native';
 
 interface Props {
     route: {
@@ -22,12 +23,17 @@ interface Props {
 
 export function DetailItem({ route }: Props){
 
+    const gold = theme.colors.gold;
+    const white = theme.colors.white;
+
     const { id } = route.params;
 
     const navigation = useNavigation();
 
     const [item, setItem] = useState<Movie>();
     const [moreItems, setMoreItems] = useState([]);
+    const [myList, setMyList]: any = useState('plus');
+    const [starRating, setStarRating]: any = useState([white, white, white, white, white]);
 
     React.useEffect( () => {
         meowApi.get( 
@@ -45,6 +51,46 @@ export function DetailItem({ route }: Props){
           }).catch(console.log);
     }, [id]);
 
+    React.useEffect( () => {
+        meowApi.post('mylist', {
+            user_id: 1,
+            title_id: id,
+            type: 'is',
+          })
+          .then(function (response) {
+            console.log(response.data.data);
+            if(response.data.data.length === 0){
+                setMyList('plus');
+            } else {
+                setMyList('check');
+            }
+          })
+          .catch(function (error) {
+            console.error(error);
+          });
+    }, [id]);
+
+    React.useEffect( () => {
+        meowApi.post('avaliation', {
+            title_id: id,
+            type: 'get'
+          })
+          .then(function (response) {
+            const starRating = response.data.data;
+            console.log(response.data.data);
+
+            var starNumber = starRating == 1 ? [gold, white, white, white, white]
+            : starRating == 2 ? [gold, gold, white, white, white] : starRating == 3 
+            ? [gold, gold, gold, white, white] : starRating == 4 ? [gold, gold, gold, gold, white] 
+            : [gold, gold, gold, gold, gold];
+
+            setStarRating(starNumber);
+          })
+          .catch(function (error) {
+            console.error(error);
+          });
+    }, [id]);
+
 
     function getImage(){
 
@@ -58,10 +104,6 @@ export function DetailItem({ route }: Props){
     function handleGoBack(){
         navigation.goBack();
     }
-
-    /* function getReleaseYear(){
-        return !!item && item.release_date ? new Date(item.release_date).getFullYear() : '';
-    } */
 
     function getTitle() {
         return (item as Movie)?.name;
@@ -78,9 +120,37 @@ export function DetailItem({ route }: Props){
             
     }
 
+    function addMyList(){
+        if(myList == 'plus'){
+
+            meowApi.post('mylist', {
+                user_id: 1,
+                title_id: id,
+                type: 'add',
+              })
+              .then(function (response) {
+                setMyList('check');
+              })
+              .catch(function (error) {
+                console.error(error);
+              });
+            
+        } else if(myList == 'check') {
+
+            meowApi.post('mylist', {
+                user_id: 1,
+                title_id: id,
+                type: 'remove',
+              })
+              .then(function (response) {
+                setMyList('plus');
+              })
+              .catch(function (error) {
+                console.error(error);
+              });           
+        }
+    }
     
-    
-console.log(id)
     return (
         
         <HBody goBack={handleGoBack} title={getTitle()}>
@@ -89,18 +159,23 @@ console.log(id)
                     <HBottomGradientBackground height={100}>
                         
                         <SButtonsContainer>
+                            <TouchableOpacity>
+                                <SMoreOptions>
+                                    <Foundation name="star" size={30} color={starRating[0]} style={{ marginRight: 10 }}/>
+                                    <Foundation name="star" size={30} color={starRating[1]} style={{ marginRight: 10 }}/>
+                                    <Foundation name="star" size={30} color={starRating[2]} style={{ marginRight: 10 }}/>
+                                    <Foundation name="star" size={30} color={starRating[3]} style={{ marginRight: 10 }}/>
+                                    <Foundation name="star" size={30} color={starRating[4]} />
+                                </SMoreOptions>
+                            </TouchableOpacity>
 
                             <SMoreOptions>
-                                <Foundation name="star" size={25} color={theme.colors.gold} style={{ marginRight: 10 }}/>
-                                <Foundation name="star" size={25} color={theme.colors.gold} style={{ marginRight: 10 }}/>
-                                <Foundation name="star" size={25} color={theme.colors.gold} style={{ marginRight: 10 }}/>
-                                <Foundation name="star" size={25} color={theme.colors.white} style={{ marginRight: 10 }}/>
-                                <Foundation name="star" size={25} color={theme.colors.white} />
-                            </SMoreOptions>
-
-                            <SMoreOptions>
-                                <Feather name="plus" size={25} color={theme.colors.white} style={{ marginRight: 40 }} />
-                                <Feather name="share-2" size={25} color={theme.colors.white} />
+                                <TouchableOpacity onPress={addMyList}>
+                                    <Feather name={myList} size={35} color={theme.colors.white} style={{ marginRight: 40 }} />
+                                </TouchableOpacity>
+                                <TouchableOpacity>
+                                    <Feather name="share-2" size={30} color={theme.colors.white} />
+                                </TouchableOpacity>                                
                             </SMoreOptions>
 
                         </SButtonsContainer>
@@ -114,21 +189,14 @@ console.log(id)
                         <STitle>{getTitle()}</STitle>
 
                         <SItemInfo>
-                            {/* {!!item?.runtime && <SSubtitle>{getRunTime()}</SSubtitle>} */}
+                            <SSubtitle>2022</SSubtitle>
+                            <SSubtitle>Série</SSubtitle>
 
-                            {/* {
-                                !!item && item.adult ? (
-                                    <SAdultBadge>
-                                        <STitleBadge>18</STitleBadge>
-                                    </SAdultBadge>
-                                ) : (
-                                    <SNormalBadge>
-                                        <STitleBadge>16</STitleBadge>
-                                    </SNormalBadge>
-                                )
-                            } */}
+
+                            {/* <SNormalBadge>
+                                <STitleBadge>16</STitleBadge>
+                            </SNormalBadge> */}
                             
-                            {/* {!!item?.release_date && <SSubtitle>{getReleaseYear()}</SSubtitle>} */}
                             <SSubtitle>Meow Indica</SSubtitle>
                             <SSubtitle>5.1</SSubtitle>
                         </SItemInfo>

@@ -6,6 +6,7 @@ import { View, TextInput, StyleSheet, Image, TouchableOpacity, Text } from 'reac
 import { RouterKey } from '../../routes/routes-keys';
 import { SContent } from './styles';
 import { saveLogin, getLogin } from '../../services';
+import { HLoadingDots } from "components/HLoadingDots";
 interface Props extends StackHeaderProps {
   children: ReactNode;
 }
