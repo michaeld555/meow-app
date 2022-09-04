@@ -19,7 +19,7 @@ export function SignOutPage({ navigation }: Props) {
         await AsyncStorage.removeItem('userData');
         setTimeout(() => {
           navigation.navigate(RouterKey.SignInPage);
-        }, 8000);
+        }, 5000);
       } catch(e) {
         alert(e);
       }

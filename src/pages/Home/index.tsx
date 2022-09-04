@@ -1,7 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { HBody } from "components/HBody";
-import { HLoading } from 'components/HLoading';
 import { HSimpleList } from "components/HSimpleList";
 import { HHighlightItem } from 'components/Items/HHighlightItem';
 import { HLandscapeItem } from 'components/Items/HLandscapeItem';
@@ -13,7 +12,6 @@ import React, { useEffect, useState } from "react";
 import { RouterKey } from 'routes/routes-keys';
 import theme from 'styles/GlobalStyles';
 import { Movie } from "types/movie.type";
-import { TVShow } from 'types/tvshow.type';
 import { HHighlightPanel } from "./components/HHighlightPanel";
 import { meowApi } from "../../services/";
 

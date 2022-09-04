@@ -121,7 +121,7 @@ export function RegisterPage({ navigation }: Props) {
             style={styleEmail}
             placeholder="Email"
             autoCorrect={false}
-            onChangeText={(text: any)=> {setEmail(text), setTextEmail(false)}}
+            onChangeText={(text: any)=> {setEmail(text), setTextEmail(false), setLoginResponse(false)}}
             />
 
             { textPassword && 

@@ -151,7 +151,7 @@ const stylePassword = textPassword == false ? styles.input : styles.inputError;
             style={styleEmail}
             placeholder="Email"
             autoCorrect={false}
-            onChangeText={(text: any)=> {setEmail(text), setTextEmail(false)}}
+            onChangeText={(text: any)=> {setEmail(text), setTextEmail(false), setLoginResponse(false)}}
             />
 
             { textPassword && !loginResponse && 
@@ -161,7 +161,7 @@ const stylePassword = textPassword == false ? styles.input : styles.inputError;
             style={stylePassword}
             placeholder="Senha"
             autoCorrect={false}
-            onChangeText={(text: any)=> {setPassword(text), setTextPassword(false)}}
+            onChangeText={(text: any)=> {setPassword(text), setTextPassword(false), setLoginResponse(false)}}
             secureTextEntry={true}
             />
 
@@ -177,7 +177,7 @@ const stylePassword = textPassword == false ? styles.input : styles.inputError;
 
             <View style={styles.btnSocial}>
             <TouchableOpacity
-            onPress={loginSocial}
+            onPress={() => {loginSocial(), setTextEmail(false), setTextPassword(false), setLoginResponse(false)}}
             style={{
                 borderWidth:1,
                 borderColor:'rgba(0,0,0,0.2)',
@@ -227,7 +227,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '90%',
-    //marginBottom: 50,
   },
   input:{
     backgroundColor: '#FFF',
