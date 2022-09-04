@@ -9,26 +9,29 @@ import { saveLogin, getLogin } from '../../services';
 import { HLoadingDots } from "components/HLoadingDots";
 import { validateEmail, validateName, validatePassword } from "../../functions/functions";
 import { Keyboard } from 'react-native'
-import * as AuthSession from 'expo-auth-session';
+
 interface Props extends StackHeaderProps {
   children: ReactNode;
 }
 
-export function SignInPage({ navigation }: Props) {
+export function RegisterPage({ navigation }: Props) {
 
+  const [name, setName] = useState([]);
   const [email, setEmail] = useState([]);
   const [password, setPassword] = useState([]);
   const [loginResponse, setLoginResponse] = useState([]);
+  const [textName, setTextName] = useState(false);
   const [textEmail, setTextEmail] = useState(false);
   const [textPassword, setTextPassword] = useState(false);
 
   async function handleSignIn() {
 
-      fetch('https://meowfansub.me/api/auth/login', {
+      fetch('https://meowfansub.me/api/auth/register', {
         method: 'POST',
         body: JSON.stringify({
           email: `${email}`,
           password: `${password}`,
+          name: `${name}`,
         }),
         headers: {
           'Content-type': 'application/json'
@@ -43,11 +46,10 @@ export function SignInPage({ navigation }: Props) {
           })
   }
 
-
-
   function login(date: any){
     if(date.success == true){
-      //saveLogin(date.data.token);
+      //alert(date.data.token)
+      saveLogin(date.data.token);
       navigation.navigate(RouterKey.PrivateRoutes);
     }
     else {
@@ -56,75 +58,36 @@ export function SignInPage({ navigation }: Props) {
     
   }
 
-  function returnRegister(){
-    navigation.navigate(RouterKey.RegisterPage);
-}
-
-function validateInputs(){
-
-  var valitedEmail = validateEmail(email);
-  var valitedPassword = validatePassword(password)
-  if(!valitedEmail){
-    setTextEmail(true)
-  }
-  if(!valitedPassword){
-    setTextPassword(true)
-  }
-  if(valitedEmail && valitedPassword){
-    Keyboard.dismiss();
-    handleSignIn();
+  function returnLogin(){
+      navigation.navigate(RouterKey.SignInPage);
   }
 
-  
+  function validateInputs(){
 
-}
+    var valitedEmail = validateEmail(email);
+    var valitedName = validateName(name);
+    var valitedPassword = validatePassword(password)
+    if(!valitedEmail){
+      setTextEmail(true)
+    }
+    if(!valitedName){
+      setTextName(true)
+    }
+    if(!valitedPassword){
+      setTextPassword(true)
+    }
+    if(valitedEmail && valitedName && valitedPassword){
+      Keyboard.dismiss();
+      handleSignIn();
+    }
 
-async function loginSocial(){
-  const CLIENT_ID = '1028943297487-0qskrdjgm2bqlr7khfe22fkcv33mu6lq.apps.googleusercontent.com';
-  const REDIRECT_URI = 'https://auth.expo.io/@michaeld555/meow-fansub-app';
-  const RESPONSE_TYPE = 'token';
-  const SCOPE = encodeURI('profile email');
+    
 
-  const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`;
-
-  const response = await AuthSession.startAsync({ authUrl })
-
-  if(response.type == 'success'){
-    const tokenUser = response.params.access_token;
-    loginGoogle(tokenUser)
-  } else {
-    alert('deu errado')
   }
 
-}
-
-async function loginGoogle(token: any){
-  const userResponse = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${token}`);
-  const userInfo = await userResponse.json();
-
-    fetch('https://meowfansub.me/api/auth/login/social', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: `${userInfo.email}`,
-        name: `${userInfo.name}`,
-        google_id: `${userInfo.id}`,
-      }),
-      headers: {
-        'Content-type': 'application/json'
-      }
-      })
-        .then((response) => response.json())
-        .then(function (json: any) {
-          setLoginResponse(json);
-          login(json)
-          console.log(loginResponse)
-        })
-}
-
-const styleEmail = textEmail == false ? styles.input : styles.inputError;
-const stylePassword = textPassword == false ? styles.input : styles.inputError;
-
-  
+  const styleName = textName == false ? styles.input : styles.inputError;
+  const styleEmail = textEmail == false ? styles.input : styles.inputError;
+  const stylePassword = textPassword == false ? styles.input : styles.inputError;
 
   return (
     <HGradientBackground>
@@ -136,6 +99,16 @@ const stylePassword = textPassword == false ? styles.input : styles.inputError;
             />
           </View>
           <View style={styles.container}>
+
+          { textName && 
+              <Text style={styles.errorText}>Nome invalido</Text>
+          }
+          <TextInput
+            style={styleName}
+            placeholder="Nome"
+            autoCorrect={false}
+            onChangeText={(text: any)=> {setName(text), setTextName(false)}}
+            />
 
             { textEmail && 
               <Text style={styles.errorText}>Email invalido</Text>
@@ -159,45 +132,19 @@ const stylePassword = textPassword == false ? styles.input : styles.inputError;
             />
 
             <HPrimaryButton 
-            title="LOGIN" 
+            title="REGISTRAR" 
             width={300}
-            onPress={() => validateInputs()}
+            onPress={() => validateInputs() }
             />
 
-            <TouchableOpacity onPress={returnRegister} style={styles.btnRegister}>
-              <Text style={styles.registerText}>Criar conta gratuita</Text>
+            <TouchableOpacity onPress={returnLogin} style={styles.btnRegister}>
+              <Text style={styles.registerText}>Retornar para Login</Text>
             </TouchableOpacity>
-
-            <View style={styles.btnSocial}>
-            <TouchableOpacity
-            onPress={loginSocial}
-            style={{
-                borderWidth:1,
-                borderColor:'rgba(0,0,0,0.2)',
-                alignItems:'center',
-                justifyContent:'center',
-                width:70,
-                height:70,
-                backgroundColor:'#fff',
-                borderRadius:50,
-                marginRight: 20,
-              }}
-              >
-                <Image
-                style={styles.icon}
-                source={require('../../../assets/icon-google.png')}
-                />
-          </TouchableOpacity>
-
-            </View>
 
           </View>
           
         </SContent>
-
     </HGradientBackground>
-
-    
     
   );
 };
@@ -216,7 +163,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '90%',
-    //marginBottom: 50,
+    marginBottom: 50,
   },
   input:{
     backgroundColor: '#FFF',
@@ -230,19 +177,10 @@ const styles = StyleSheet.create({
   },
   btnRegister:{
     marginTop: 15,
-    marginBottom: 20,
   },
   registerText:{
     color: '#FFF',
     fontSize: 17,
-  },
-  icon:{
-    width: 40,
-    height: 40,
-  },
-  btnSocial:{
-    flex: 1,
-    flexDirection: 'row'
   },
   errorText:{
     color: '#FF3D00',
@@ -261,4 +199,5 @@ const styles = StyleSheet.create({
     borderColor: '#FF3D00',
     borderWidth: 1,
   },
+  
 })

@@ -2,6 +2,7 @@
   "expo": {
     "name": "Meow Fansub",
     "slug": "meow-fansub-app",
+    "scheme": "meow-fansub-app",
     "privacy": "public",
     "description": "This is a app for meow fansub",
     "version": "1.0.0",

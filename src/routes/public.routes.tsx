@@ -7,6 +7,7 @@ import { SignInPage } from 'pages/SignIn';
 import { SignOutPage } from 'pages/SignOut';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { HLoading } from 'components/HLoading';
+import { RegisterPage } from 'pages/Register';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -53,7 +54,7 @@ export function PublicRoutes() {
       return (
         <Navigator screenOptions={tabBarOptions} initialRouteName={ RouterKey.SignInPage }>
           <Screen name={RouterKey.SignInPage}  component={SignInPage} />
-          <Screen name={RouterKey.SignOutPage}  component={SignOutPage} />
+          <Screen name={RouterKey.RegisterPage}  component={RegisterPage} />
           <Screen name={RouterKey.PrivateRoutes}  component={PrivateRoutes} />
         </Navigator>
       )

@@ -11,7 +11,7 @@ import { HPortraitItem } from 'components/Items/HPortraitItem';
 import { RouterKey } from 'routes/routes-keys';
 import { useNavigation } from '@react-navigation/native';
 import { meowApi } from "../../services/";
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 
 interface Props {
     route: {
@@ -34,6 +34,7 @@ export function DetailItem({ route }: Props){
     const [moreItems, setMoreItems] = useState([]);
     const [myList, setMyList]: any = useState('plus');
     const [starRating, setStarRating]: any = useState([white, white, white, white, white]);
+    const [modalVisible, setModalVisible] = useState(false);
 
     React.useEffect( () => {
         meowApi.get( 
@@ -159,7 +160,7 @@ export function DetailItem({ route }: Props){
                     <HBottomGradientBackground height={100}>
                         
                         <SButtonsContainer>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => setModalVisible(true)}>
                                 <SMoreOptions>
                                     <Foundation name="star" size={30} color={starRating[0]} style={{ marginRight: 10 }}/>
                                     <Foundation name="star" size={30} color={starRating[1]} style={{ marginRight: 10 }}/>
@@ -191,12 +192,6 @@ export function DetailItem({ route }: Props){
                         <SItemInfo>
                             <SSubtitle>2022</SSubtitle>
                             <SSubtitle>Série</SSubtitle>
-
-
-                            {/* <SNormalBadge>
-                                <STitleBadge>16</STitleBadge>
-                            </SNormalBadge> */}
-                            
                             <SSubtitle>Meow Indica</SSubtitle>
                             <SSubtitle>5.1</SSubtitle>
                         </SItemInfo>
@@ -218,7 +213,65 @@ export function DetailItem({ route }: Props){
                     />   
                 </HTopGrandientBackground>
             </SBannerItem>
+
+            <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+            //Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+            }}
+            >
+                <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                <STitle>Sua Avaliação:</STitle>
+                    <TouchableOpacity>
+                        <SMoreOptions >
+                        <TouchableOpacity><Foundation name="star" size={50} color={gold} style={{ marginRight: 10 }}/></TouchableOpacity>
+                        <TouchableOpacity><Foundation name="star" size={50} color={gold} style={{ marginRight: 10 }}/></TouchableOpacity>
+                        <TouchableOpacity><Foundation name="star" size={50} color={gold} style={{ marginRight: 10 }}/></TouchableOpacity>
+                        <TouchableOpacity><Foundation name="star" size={50} color={gold} style={{ marginRight: 10 }}/></TouchableOpacity>
+                        <TouchableOpacity><Foundation name="star" size={50} color={gold} /></TouchableOpacity>                                   
+                        </SMoreOptions>
+                    </TouchableOpacity>                    
+                </View>
+                </View>
+            </Modal>
             
         </HBody>
     )
 }
+
+const styles = StyleSheet.create({
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: "#50B4F2",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
+    },
+    textStyle: {
+      color: "white",
+      fontWeight: "bold",
+      textAlign: "center"
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: "center"
+    }
+});
