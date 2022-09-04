@@ -14,8 +14,8 @@ export const STouchableOpacity = styled.TouchableOpacity`
 
 export const SLinearGradient = styled(LinearGradient).attrs({
     colors: [
-        theme.colors.purple_dark,
-        theme.colors.purple_normal,
+        theme.colors.blue_clear,
+        theme.colors.blue_clear,
     ],
     start: {x: 0, y: 0.75},
     end: {x: 1, y: 0.25},

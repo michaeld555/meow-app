@@ -8,8 +8,9 @@ import { SContent } from './styles';
 import { saveLogin, getLogin } from '../../services';
 import { HLoadingDots } from "components/HLoadingDots";
 import { validateEmail, validateName, validatePassword } from "../../functions/functions";
-import { Keyboard } from 'react-native'
+import { Keyboard, ToastAndroid, Platform } from 'react-native'
 import * as AuthSession from 'expo-auth-session';
+import { LoaderModal } from "components/LoaderModal";
 interface Props extends StackHeaderProps {
   children: ReactNode;
 }
@@ -18,12 +19,13 @@ export function SignInPage({ navigation }: Props) {
 
   const [email, setEmail] = useState([]);
   const [password, setPassword] = useState([]);
-  const [loginResponse, setLoginResponse] = useState([]);
+  const [loginResponse, setLoginResponse] = useState(false);
   const [textEmail, setTextEmail] = useState(false);
   const [textPassword, setTextPassword] = useState(false);
+  const [modalHide, setModalHide] = useState(false);
 
   async function handleSignIn() {
-
+      
       fetch('https://meowfansub.me/api/auth/login', {
         method: 'POST',
         body: JSON.stringify({
@@ -36,22 +38,22 @@ export function SignInPage({ navigation }: Props) {
         })
           .then((response) => response.json())
           .then(function (json: any) {
-            setLoginResponse(json);
-            //alert(loginResponse)
             login(json)
-            console.log(loginResponse)
           })
   }
 
 
 
   function login(date: any){
+    setModalHide(false);
     if(date.success == true){
-      //saveLogin(date.data.token);
+      saveLogin(date.data.token);
       navigation.navigate(RouterKey.PrivateRoutes);
     }
     else {
-      alert(date.message)
+      setLoginResponse(true)
+      setTextPassword(true)
+      setTextEmail(true)
     }
     
   }
@@ -72,10 +74,9 @@ function validateInputs(){
   }
   if(valitedEmail && valitedPassword){
     Keyboard.dismiss();
+    setModalHide(true);
     handleSignIn();
   }
-
-  
 
 }
 
@@ -90,10 +91,15 @@ async function loginSocial(){
   const response = await AuthSession.startAsync({ authUrl })
 
   if(response.type == 'success'){
+    setModalHide(true);
     const tokenUser = response.params.access_token;
     loginGoogle(tokenUser)
   } else {
-    alert('deu errado')
+    if (Platform.OS === 'android') {
+      ToastAndroid.show('Finalize seu login para entrar com o Google', ToastAndroid.LONG)
+    } else {
+      alert('Finalize seu login para entrar com o Google');
+    }
   }
 
 }
@@ -115,9 +121,7 @@ async function loginGoogle(token: any){
       })
         .then((response) => response.json())
         .then(function (json: any) {
-          setLoginResponse(json);
           login(json)
-          console.log(loginResponse)
         })
 }
 
@@ -137,8 +141,11 @@ const stylePassword = textPassword == false ? styles.input : styles.inputError;
           </View>
           <View style={styles.container}>
 
-            { textEmail && 
+            { textEmail && !loginResponse && 
               <Text style={styles.errorText}>Email invalido</Text>
+            }
+            { textEmail && loginResponse && 
+              <Text style={styles.errorText}>Credenciais Invalidas</Text>
             }
             <TextInput
             style={styleEmail}
@@ -147,7 +154,7 @@ const stylePassword = textPassword == false ? styles.input : styles.inputError;
             onChangeText={(text: any)=> {setEmail(text), setTextEmail(false)}}
             />
 
-            { textPassword && 
+            { textPassword && !loginResponse && 
                 <Text style={styles.errorText}>Senha invalida</Text>
             }
             <TextInput
@@ -194,6 +201,10 @@ const stylePassword = textPassword == false ? styles.input : styles.inputError;
           </View>
           
         </SContent>
+
+        <LoaderModal
+        showModal={modalHide}
+        />
 
     </HGradientBackground>
 

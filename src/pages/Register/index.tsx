@@ -9,6 +9,7 @@ import { saveLogin, getLogin } from '../../services';
 import { HLoadingDots } from "components/HLoadingDots";
 import { validateEmail, validateName, validatePassword } from "../../functions/functions";
 import { Keyboard } from 'react-native'
+import { LoaderModal } from "components/LoaderModal";
 
 interface Props extends StackHeaderProps {
   children: ReactNode;
@@ -19,10 +20,11 @@ export function RegisterPage({ navigation }: Props) {
   const [name, setName] = useState([]);
   const [email, setEmail] = useState([]);
   const [password, setPassword] = useState([]);
-  const [loginResponse, setLoginResponse] = useState([]);
+  const [loginResponse, setLoginResponse] = useState(false);
   const [textName, setTextName] = useState(false);
   const [textEmail, setTextEmail] = useState(false);
   const [textPassword, setTextPassword] = useState(false);
+  const [modalHide, setModalHide] = useState(false);
 
   async function handleSignIn() {
 
@@ -39,21 +41,19 @@ export function RegisterPage({ navigation }: Props) {
         })
           .then((response) => response.json())
           .then(function (json: any) {
-            setLoginResponse(json);
-            //alert(loginResponse)
             login(json)
-            console.log(loginResponse)
           })
   }
 
   function login(date: any){
+    setModalHide(false);
     if(date.success == true){
-      //alert(date.data.token)
       saveLogin(date.data.token);
       navigation.navigate(RouterKey.PrivateRoutes);
     }
     else {
-      alert(date.message)
+      setLoginResponse(true);
+      setTextEmail(true);
     }
     
   }
@@ -78,6 +78,7 @@ export function RegisterPage({ navigation }: Props) {
     }
     if(valitedEmail && valitedName && valitedPassword){
       Keyboard.dismiss();
+      setModalHide(true);
       handleSignIn();
     }
 
@@ -110,8 +111,11 @@ export function RegisterPage({ navigation }: Props) {
             onChangeText={(text: any)=> {setName(text), setTextName(false)}}
             />
 
-            { textEmail && 
+            { textEmail && !loginResponse && 
               <Text style={styles.errorText}>Email invalido</Text>
+            }
+            { textEmail && loginResponse && 
+              <Text style={styles.errorText}>Email já Cadastrado</Text>
             }
             <TextInput
             style={styleEmail}
@@ -144,6 +148,9 @@ export function RegisterPage({ navigation }: Props) {
           </View>
           
         </SContent>
+        <LoaderModal
+        showModal={modalHide}
+        />
     </HGradientBackground>
     
   );
