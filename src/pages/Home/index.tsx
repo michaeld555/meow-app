@@ -22,7 +22,7 @@ export function HomePage({ navigation }: Props) {
 
     const [highlightMovie, setHighlightMovie] = useState<Movie>();
     const [ForYou, setForYou] = useState([]);
-    const [MyList, setMyList] = useState([]);
+    const [youLike, setYouLike] = useState([]);
     const [Recent, setRecent] = useState([]);
     const [MorePopular, setMorePopular] = useState([]);
     const [MoreWeekWatched, setMoreWeekWatched] = useState([]);
@@ -44,9 +44,9 @@ export function HomePage({ navigation }: Props) {
 
     React.useEffect( () => {
         meowApi.get( 
-            'mylist/1',
+            'title?type=random',
           ).then(function (response: any) {
-            setMyList(response.data.data)
+            setYouLike(response.data.data)
           }).catch(console.log);
     }, []);
 
@@ -169,15 +169,12 @@ export function HomePage({ navigation }: Props) {
             />
 
             <HSimpleList
-                title="Sua lista"
-                items={MyList}
-                onPressTitle={handleMyList}
-                renderIconTitle={<Feather name="chevron-right" size={16} color={theme.colors.white} />}
-                renderItem={({item}) => (
-                    <HSquareItem 
+                title="Talvez você goste"
+                items={youLike}
+                renderItem={({ item }) => (
+                    <HPortraitItem 
                         id={item.id} 
-                        image={item.url_image3}
-                        title={item.name}
+                        image={item.url_image}
                         onPress={(id: number) => handleShowDetailItem(id)}
                     />
                 )}

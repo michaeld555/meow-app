@@ -23,4 +23,6 @@ export interface ItemDetail {
     vote_count: number;
     runtime: number | null;
     url_image: string;
+    url_image2: string;
+    url_image3: string;
 }

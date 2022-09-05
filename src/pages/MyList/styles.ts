@@ -12,14 +12,14 @@ export const SContent = styled.View`
 export const STitle = styled.Text`
     color: ${theme.colors.white};
     width: 100%;
-    font-size: 16px; 
-    padding-top: 14px;
+    font-size: 20px; 
+    padding-top: 5px;
     padding-left: 24px; 
     padding-bottom: 16px;
     font-weight: 700;
 `;
 
-export const search = StyleSheet.create({
+export const mylist = StyleSheet.create({
     loaderView: {
         margin: 0,
         borderRadius: 20,
@@ -29,7 +29,7 @@ export const search = StyleSheet.create({
         width: 200,
       },
     emptyView: {
-        marginTop: 40,
+        marginTop: 120,
         borderRadius: 20,
         padding: 0,
         alignSelf: "center",

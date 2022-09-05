@@ -8,7 +8,7 @@ import { SContent } from './styles';
 import { saveLogin, getLogin } from '../../services';
 import { HLoadingDots } from "components/HLoadingDots";
 import { validateEmail, validateName, validatePassword } from "../../functions/functions";
-import { Keyboard, ToastAndroid, Platform } from 'react-native'
+import { Keyboard, ToastAndroid, Platform, BackHandler } from 'react-native'
 import * as AuthSession from 'expo-auth-session';
 import { LoaderModal } from "components/LoaderModal";
 interface Props extends StackHeaderProps {

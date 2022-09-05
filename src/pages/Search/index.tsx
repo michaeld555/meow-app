@@ -9,7 +9,8 @@ import { Movie } from "types/movie.type";
 import { HPortraitItem } from "components/Items/HPortraitItem";
 import { RouterKey } from "routes/routes-keys";
 import { meowApi } from "../../services/";
-const axios = require('axios');
+import { search } from "./styles";
+import Lottie from "lottie-react-native";
 
 interface Props extends DrawerContentComponentProps {
 }
@@ -18,31 +19,32 @@ interface Props extends DrawerContentComponentProps {
 export function SearchPage({ navigation }: Props) {
 
     const [movies, setMovies] = useState<PageableTheMovieDb<Movie>>(new PageableTheMovieDb());
-
     const [textSearch, setTextSearch] = useState<string>();
-
     const [MorePopular, setMorePopular] = useState([]);
+    const [loader, setLoader] = useState(true);
+    const [response, setResponse] = useState(false);
+    const [emptyResponse, setEmptyResponse] = useState(false);
+    const [searchText, setSearchText] = useState(`Mais procurados`);
     
     function openSidebar() {
         navigation.openDrawer();
     }
 
     React.useEffect( () => {
-        /* meowApi.get( 
-              'title?type=more_popular',
-            ).then(function (response: any) {
-                setMovies(response.data)
-            }).catch(console.log); */
             popularTitles();
-
     }, [])
 
     function onChangeTextSearch(text: string){
         if(text.trim() != ''){
-            console.log(text);
+            setSearchText(`Resultados para: ${text}`);
+            setResponse(false)
+            setLoader(true)
             searchTitles(text);
         }
         else {
+            setSearchText(`Mais procurados`)
+            setEmptyResponse(false)
+            setLoader(true)
             popularTitles();
         }
     }
@@ -51,7 +53,17 @@ export function SearchPage({ navigation }: Props) {
         meowApi.get( 
             `search/${title}`,
           ).then(function (response: any) {
-              setMovies(response.data)
+              
+              if(response.data.data != 0){
+                setMovies(response.data)
+                setLoader(false);
+                setResponse(true)
+                setEmptyResponse(false)
+              } else {
+                setLoader(false)
+                setResponse(false)
+                setEmptyResponse(true)
+              }
           }).catch(console.log);
     }
 
@@ -60,14 +72,15 @@ export function SearchPage({ navigation }: Props) {
             'title?type=more_popular',
           ).then(function (response: any) {
               setMovies(response.data)
+              setLoader(false)
+              setResponse(true)
           }).catch(console.log);
     }
 
-    function handleShowDetailItem(id: number, type: 'movie' | 'tv' = 'movie'){
-        navigation.navigate(RouterKey.DetailItemPage, { id, type });
+    function handleShowDetailItem(id: number){
+        navigation.navigate(RouterKey.DetailItemPage, { id});
     }
-        //TODO: search aqui
-        console.log(MorePopular.length)
+
     return (
         <HBody 
             openSidebar={openSidebar} 
@@ -80,8 +93,9 @@ export function SearchPage({ navigation }: Props) {
                 />}    
         >
             <SContent>
-                <STitle>Mais procurados</STitle>
-                {
+                <STitle>{searchText}</STitle>
+
+                { response  && 
                     
                     movies.data.map((x) => (
                        <View key={x.id} style={{ paddingBottom: 26 }}>
@@ -93,8 +107,34 @@ export function SearchPage({ navigation }: Props) {
                        </View>
                        
                     ) )
+                }
 
+                { loader  && 
+                <View style={search.loaderView}>                
+                    <Lottie
+                    source={require("../../assets/116545-loading-cat.json")}
+                    autoPlay={true}
+                    loop={true}
+                    />           
+                </View>
+                }
 
+                { emptyResponse  && 
+                <View>
+                <View style={search.emptyView}>                
+                    <Lottie
+                    source={require("../../assets/search-cat.json")}
+                    autoPlay={true}
+                    loop={true}
+                    />
+                                 
+                </View>
+                <Text style={ search.Title }>Sem resultados...</Text>
+                <Text style={ search.SubTitle }>Não encontramos resultados para sua pesquisa</Text>
+                <Text style={ search.SubTitle }>talvez voce não digitou corretamente ou ainda</Text>
+                <Text style={ search.SubTitle2 }>não temos esse titulo em nosso catálogo.</Text>
+                
+                </View> 
                 }
 
             </SContent>
