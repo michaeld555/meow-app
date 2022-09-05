@@ -6,10 +6,10 @@ import { View, TextInput, StyleSheet, Image, TouchableOpacity, Text } from 'reac
 import { RouterKey } from '../../routes/routes-keys';
 import { SContent } from './styles';
 import { saveLogin, getLogin } from '../../services';
-import { HLoadingDots } from "components/HLoadingDots";
 import { validateEmail, validateName, validatePassword } from "../../functions/functions";
-import { Keyboard } from 'react-native'
+import { Keyboard, BackHandler } from 'react-native'
 import { LoaderModal } from "components/LoaderModal";
+import { useIsFocused } from '@react-navigation/native';
 
 interface Props extends StackHeaderProps {
   children: ReactNode;
@@ -25,6 +25,23 @@ export function RegisterPage({ navigation }: Props) {
   const [textEmail, setTextEmail] = useState(false);
   const [textPassword, setTextPassword] = useState(false);
   const [modalHide, setModalHide] = useState(false);
+  const isFocused = useIsFocused();
+
+  /* React.useEffect(() => {
+    const backAction = () => {
+      alert("Não vaii 😭");
+      return true;
+    };
+
+    BackHandler.removeEventListener('hardwareBackPress', backAction);
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+    return () => backHandler.remove();
+
+  }, [isFocused]); */
 
   async function handleSignIn() {
 

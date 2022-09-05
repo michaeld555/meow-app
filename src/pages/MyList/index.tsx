@@ -35,7 +35,7 @@ export function MyList({ navigation }: Props) {
 
     React.useEffect( () => {
 
-        setLoader(true)
+        //setLoader(true)
         setResponse(false)
         setEmptyResponse(false)
 

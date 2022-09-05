@@ -3,7 +3,7 @@ import { HBody } from 'components/HBody';
 import { HBottomGradientBackground } from 'components/HBottomGrandientBackground';
 import { HTopGrandientBackground } from 'components/HTopGrandientBackground';
 import React, { useEffect, useState } from "react";
-import { SAdultBadge, SBannerItem, SButtonsContainer, SCircle, SContentItem, SImageBackground, SItemInfo, SMoreOptions, SNormalBadge, SSubtitle, STitle, STitleBadge } from './styles';
+import { SBannerItem, SButtonsContainer, SCircle, SContentItem, SImageBackground, SItemInfo, SMoreOptions, SSubtitle, STitle, ETitle, STitleBadge } from './styles';
 import theme from 'styles/GlobalStyles';
 import { Movie } from 'types/movie.type';
 import { HSimpleList } from 'components/HSimpleList';
@@ -11,7 +11,10 @@ import { HPortraitItem } from 'components/Items/HPortraitItem';
 import { RouterKey } from 'routes/routes-keys';
 import { useNavigation } from '@react-navigation/native';
 import { meowApi } from "../../services/";
-import {TouchableOpacity, Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import {TouchableOpacity, Alert, Modal, StyleSheet, Text, Pressable, View, Share} from 'react-native';
+import { Episodes } from 'components/Episodes';
+import { PageableTheMovieDb } from "types/global.type";
+
 
 interface Props {
     route: {
@@ -35,6 +38,8 @@ export function DetailItem({ route }: Props){
     const [myList, setMyList]: any = useState('plus');
     const [starRating, setStarRating]: any = useState([white, white, white, white, white]);
     const [modalVisible, setModalVisible] = useState(false);
+    const [movies, setMovies] = useState<PageableTheMovieDb<Movie>>(new PageableTheMovieDb());
+
 
     React.useEffect( () => {
         meowApi.get( 
@@ -49,6 +54,7 @@ export function DetailItem({ route }: Props){
             `title/${id}`,
           ).then(function (response: any) {
             setItem(response.data.data[0])
+            setMovies(response.data.data[0])
           }).catch(console.log);
     }, [id]);
 
@@ -151,6 +157,28 @@ export function DetailItem({ route }: Props){
               });           
         }
     }
+
+    async function share(){
+
+            try {
+              const result = await Share.share({
+                message:
+                  `Olá venha assistir ${getTitle()} legendado e de graça no app da Meow`,
+              });
+              if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                  // shared with activity type of result.activityType
+                } else {
+                  // shared
+                }
+              } else if (result.action === Share.dismissedAction) {
+                // dismissed
+              }
+            } catch (error: any) {
+              alert(error.message);
+            }
+        
+    }
     
     return (
         
@@ -174,7 +202,7 @@ export function DetailItem({ route }: Props){
                                 <TouchableOpacity onPress={addMyList}>
                                     <Feather name={myList} size={35} color={theme.colors.white} style={{ marginRight: 40 }} />
                                 </TouchableOpacity>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={share}>
                                     <Feather name="share-2" size={30} color={theme.colors.white} />
                                 </TouchableOpacity>                                
                             </SMoreOptions>
@@ -199,6 +227,22 @@ export function DetailItem({ route }: Props){
                         <SSubtitle style={{ marginTop: 10 }}>{getDescription()}</SSubtitle>
 
                     </SContentItem>
+
+                    <ETitle>Episodios: </ETitle>
+
+                    { movies  && 
+                    
+                    movies.episodes.map((x) => (
+                       <View key={x.id} style={{ paddingBottom: 26 }}>
+                           <Episodes
+                                id={x.id} 
+                                image={x.url_image}
+                                onPress={(id: number) => handleChangeDetailItem(id)}
+                            />
+                       </View>
+                       
+                    ) )
+                    }
 
                     <HSimpleList
                         title="Mais como esse"

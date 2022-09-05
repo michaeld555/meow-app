@@ -5,7 +5,7 @@ import { TabRoutes } from './tab.routes';
 import { HSidebarMenu } from 'components/HSidebarMenu';
 import { SettingsPage } from 'pages/Settings';
 import { DetailItem } from 'pages/DetailItem';
-import { SignOutPage } from 'pages/SignOut';
+//import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
 const { Navigator, Screen } = createDrawerNavigator();
 
@@ -23,7 +23,6 @@ export function PrivateRoutes() {
         <Screen name={RouterKey.TabRoutes} component={TabRoutes}/>
         <Screen name={RouterKey.SettingsPage} component={SettingsPage} />
         <Screen name={RouterKey.DetailItemPage} component={DetailItem} />
-        <Screen name={RouterKey.SignOutPage}  component={SignOutPage} />
       </Navigator>
     )
 }

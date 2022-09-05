@@ -5,6 +5,7 @@ export class PageableTheMovieDb<T> {
     public data: Array<T> = [];
     public total_pages: number = 1;
     public totalResults: number = 0;
+    public episodes: Array<T> = [];
 }
 
 export interface ItemDetail {

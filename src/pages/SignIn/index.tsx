@@ -8,9 +8,10 @@ import { SContent } from './styles';
 import { saveLogin, getLogin } from '../../services';
 import { HLoadingDots } from "components/HLoadingDots";
 import { validateEmail, validateName, validatePassword } from "../../functions/functions";
-import { Keyboard, ToastAndroid, Platform, BackHandler } from 'react-native'
+import { Keyboard, ToastAndroid, Platform, BackHandler, Alert } from 'react-native'
 import * as AuthSession from 'expo-auth-session';
 import { LoaderModal } from "components/LoaderModal";
+import { useIsFocused } from '@react-navigation/native';
 interface Props extends StackHeaderProps {
   children: ReactNode;
 }
@@ -23,6 +24,31 @@ export function SignInPage({ navigation }: Props) {
   const [textEmail, setTextEmail] = useState(false);
   const [textPassword, setTextPassword] = useState(false);
   const [modalHide, setModalHide] = useState(false);
+  const isFocused = useIsFocused();
+
+  /* React.useEffect(() => {
+    
+    const backAction = () => {
+      Alert.alert("Não vaii 😭", "Tem certeza que já quer ir embora?", [
+        {
+          text: "Cancelar",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "Sair", onPress: () => BackHandler.exitApp() }
+      ]);
+      return true;
+    };
+
+    BackHandler.removeEventListener('hardwareBackPress', backAction);
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [isFocused]); */
 
   async function handleSignIn() {
       

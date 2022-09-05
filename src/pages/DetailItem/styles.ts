@@ -50,6 +50,14 @@ export const STitle = styled.Text`
     font-weight: 700;
 `;
 
+export const ETitle = styled.Text`
+    color: ${theme.colors.white};
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    margin-left: 19px;
+`;
+
 export const SSubtitle = styled.Text`
     color: ${theme.colors.white};
     font-size: 13px;
