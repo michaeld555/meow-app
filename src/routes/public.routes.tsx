@@ -9,6 +9,7 @@ import { HLoading } from 'components/HLoading';
 import { RegisterPage } from 'pages/Register';
 import { SignOutPage } from 'pages/SignOut';
 
+
 const { Navigator, Screen } = createStackNavigator();
 
 const tabBarOptions = {

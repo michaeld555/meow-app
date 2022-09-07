@@ -1,5 +1,5 @@
 import React from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RouterKey } from './routes-keys';
 import { TabRoutes } from './tab.routes';
 import { HSidebarMenu } from 'components/HSidebarMenu';
@@ -7,7 +7,7 @@ import { SettingsPage } from 'pages/Settings';
 import { DetailItem } from 'pages/DetailItem';
 //import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
-const { Navigator, Screen } = createDrawerNavigator();
+const { Navigator, Screen } = createNativeStackNavigator();
 
 const tabBarOptions = {
   headerShown: false,
@@ -17,8 +17,7 @@ export function PrivateRoutes() {
     return (
       <Navigator 
         screenOptions={tabBarOptions} 
-        initialRouteName={RouterKey.TabRoutes} 
-        drawerContent={(props) => <HSidebarMenu {...props} />}
+        initialRouteName={RouterKey.TabRoutes}
       >
         <Screen name={RouterKey.TabRoutes} component={TabRoutes}/>
         <Screen name={RouterKey.SettingsPage} component={SettingsPage} />

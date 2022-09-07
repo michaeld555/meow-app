@@ -1,6 +1,7 @@
 import { AntDesign, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { StackHeaderProps } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React from 'react';
+import React, {ReactNode} from 'react';
 import { Platform } from 'react-native';
 import { AccountPage } from 'pages/Account';
 import { HomePage } from 'pages/Home';
@@ -34,7 +35,11 @@ const tabBarStyle = {
   borderTopColor: theme.colors.gray_dark,
 };
 
-export function TabRoutes() {
+interface Props extends StackHeaderProps {
+  children: ReactNode;
+}
+
+export function TabRoutes({ navigation }: Props) {
 
     const { currentTabIndex, setCurrentTab } = useTabNavigation();
 
@@ -48,7 +53,7 @@ export function TabRoutes() {
           component={HomePage} 
           listeners={{
             tabPress: () => {
-              setCurrentTab(0, currentTabIndex);
+              navigation.navigate(RouterKey.PrivateRoutes);
             },
           }}
           options={{
@@ -68,7 +73,7 @@ export function TabRoutes() {
           component={SearchPage} 
           listeners={{
             tabPress: () => {
-              setCurrentTab(1, currentTabIndex);
+              navigation.navigate(RouterKey.PrivateRoutes);
             },
           }}
           options={{
@@ -89,7 +94,7 @@ export function TabRoutes() {
           component={MyList} 
           listeners={{
             tabPress: () => {
-              setCurrentTab(1, currentTabIndex);
+              navigation.navigate(RouterKey.PrivateRoutes);
             },
           }}
           options={{
@@ -109,7 +114,7 @@ export function TabRoutes() {
           component={AccountPage} 
           listeners={{
             tabPress: () => {
-              setCurrentTab(2, currentTabIndex);
+              navigation.navigate(RouterKey.PrivateRoutes);
             },
           }}
           options={{

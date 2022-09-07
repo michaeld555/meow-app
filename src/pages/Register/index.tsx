@@ -66,7 +66,7 @@ export function RegisterPage({ navigation }: Props) {
     setModalHide(false);
     if(date.success == true){
       saveLogin(date.data.token);
-      navigation.navigate(RouterKey.PrivateRoutes);
+      navigation.navigate(RouterKey.HomePage);
     }
     else {
       setLoginResponse(true);

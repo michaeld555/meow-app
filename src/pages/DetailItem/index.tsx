@@ -237,7 +237,10 @@ export function DetailItem({ route }: Props){
                            <Episodes
                                 id={x.id} 
                                 image={x.url_image}
-                                onPress={(id: number) => handleChangeDetailItem(id)}
+                                description={x.description}
+                                ep_number={x.ep_number}
+                                video_url={x.video_url}
+                                onPress={(video_url: string) => { navigation.navigate(RouterKey.SettingsPage as never, { video_url } as never)  }}
                             />
                        </View>
                        
