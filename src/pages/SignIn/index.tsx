@@ -12,6 +12,7 @@ import { Keyboard, ToastAndroid, Platform, BackHandler, Alert } from 'react-nati
 import * as AuthSession from 'expo-auth-session';
 import { LoaderModal } from "components/LoaderModal";
 import { useIsFocused } from '@react-navigation/native';
+import { useBackHandler } from '@react-native-community/hooks'
 interface Props extends StackHeaderProps {
   children: ReactNode;
 }
@@ -25,6 +26,19 @@ export function SignInPage({ navigation }: Props) {
   const [textPassword, setTextPassword] = useState(false);
   const [modalHide, setModalHide] = useState(false);
   const isFocused = useIsFocused();
+
+  /* useBackHandler(() => {
+    
+    Alert.alert("Não vaii 😭", "Tem certeza que já quer ir embora?", [
+      {
+        text: "Cancelar",
+        onPress: () => null,
+        style: "cancel"
+      },
+      { text: "Sair", onPress: () => BackHandler.exitApp() }
+    ]);
+    return true;
+  }) */
 
   /* React.useEffect(() => {
     
@@ -74,7 +88,7 @@ export function SignInPage({ navigation }: Props) {
     setModalHide(false);
     if(date.success == true){
       saveLogin(date.data.token);
-      navigation.navigate(RouterKey.HomePage);
+      navigation.navigate(RouterKey.PrivateRoutes);
     }
     else {
       setLoginResponse(true)

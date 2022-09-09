@@ -7,10 +7,9 @@ import { RouterKey } from '../../routes/routes-keys';
 import { SContent } from './styles';
 import { saveLogin, getLogin } from '../../services';
 import { validateEmail, validateName, validatePassword } from "../../functions/functions";
-import { Keyboard, BackHandler } from 'react-native'
+import { Keyboard, BackHandler, Alert } from 'react-native'
 import { LoaderModal } from "components/LoaderModal";
 import { useIsFocused } from '@react-navigation/native';
-
 interface Props extends StackHeaderProps {
   children: ReactNode;
 }
@@ -26,22 +25,6 @@ export function RegisterPage({ navigation }: Props) {
   const [textPassword, setTextPassword] = useState(false);
   const [modalHide, setModalHide] = useState(false);
   const isFocused = useIsFocused();
-
-  /* React.useEffect(() => {
-    const backAction = () => {
-      alert("Não vaii 😭");
-      return true;
-    };
-
-    BackHandler.removeEventListener('hardwareBackPress', backAction);
-
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-    return () => backHandler.remove();
-
-  }, [isFocused]); */
 
   async function handleSignIn() {
 
@@ -66,7 +49,7 @@ export function RegisterPage({ navigation }: Props) {
     setModalHide(false);
     if(date.success == true){
       saveLogin(date.data.token);
-      navigation.navigate(RouterKey.HomePage);
+      navigation.navigate(RouterKey.PrivateRoutes);
     }
     else {
       setLoginResponse(true);

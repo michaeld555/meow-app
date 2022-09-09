@@ -1,13 +1,14 @@
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { HBody } from 'components/HBody';
-import { Text, View, StatusBar } from 'react-native';
+import { Text, View} from 'react-native';
 import { SContent } from './styles';
 import { WebView } from 'react-native-webview';
 import * as ScreenOrientation from 'expo-screen-orientation';
-import { setStatusBarHidden } from 'expo-status-bar';
+import { setStatusBarHidden, setStatusBarStyle } from 'expo-status-bar';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useBackHandler } from '@react-native-community/hooks'
 import { useNavigation } from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 
 interface Props {
   route: {
@@ -22,6 +23,10 @@ export function SettingsPage({ route }: Props) {
   const navigation = useNavigation();
   const { video_url } = route.params;
 
+  async function changeScreenOrientation() {
+      ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT);
+  }
+
   useBackHandler(() => {
     navigation.goBack();
     setStatusBarHidden(false, 'fade')
@@ -33,11 +38,9 @@ export function SettingsPage({ route }: Props) {
   setStatusBarHidden(true, 'fade')
   NavigationBar.setVisibilityAsync("hidden")
   NavigationBar.setBehaviorAsync('overlay-swipe')
-  ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE_LEFT)
 
   
     return (
-    
     <WebView
     allowsFullscreenVideo
     useWebKit
@@ -46,8 +49,9 @@ export function SettingsPage({ route }: Props) {
     javaScriptEnabled
     scrollEnabled={false}
     source={{ uri: `${video_url}` }}
-     />
+    onLoad={() => {changeScreenOrientation()}}
     
+     />
   );
 
 };

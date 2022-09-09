@@ -14,6 +14,7 @@ import { meowApi } from "../../services/";
 import {TouchableOpacity, Alert, Modal, StyleSheet, Text, Pressable, View, Share} from 'react-native';
 import { Episodes } from 'components/Episodes';
 import { PageableTheMovieDb } from "types/global.type";
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 
 interface Props {
