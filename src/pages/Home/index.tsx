@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { RouterKey } from 'routes/routes-keys';
 import theme from 'styles/GlobalStyles';
 import { Movie } from "types/movie.type";
+import faker from "types/faker.json";
 import { HHighlightPanel } from "./components/HHighlightPanel";
 import { meowApi } from "../../services/";
 
@@ -21,17 +22,30 @@ interface Props extends DrawerContentComponentProps {
 export function HomePage({ navigation }: Props) {
 
     const [highlightMovie, setHighlightMovie] = useState<Movie>();
-    const [ForYou, setForYou] = useState([]);
-    const [youLike, setYouLike] = useState([]);
-    const [Recent, setRecent] = useState([]);
-    const [MorePopular, setMorePopular] = useState([]);
-    const [MoreWeekWatched, setMoreWeekWatched] = useState([]);
+    const [ForYou, setForYou]: any = useState({});
+    const [youLike, setYouLike]: any = useState({});
+    const [Recent, setRecent]: any = useState({});
+    const [MorePopular, setMorePopular]: any = useState({});
+    const [MoreWeekWatched, setMoreWeekWatched]: any = useState({});
     const [Painel, setPainel] = useState<Movie>();
-    const [MoreReviwed, setMoreReviwed] = useState([]);
-    const [MeowIndica, setMeowIndica] = useState([]);
-    const [Movies, setMovies] = useState([]);
-    const [BestWatch, setBestWatch] = useState([]);
-    const [Curtas, setCurtas] = useState([]);
+    const [MoreReviwed, setMoreReviwed]: any = useState({});
+    const [MeowIndica, setMeowIndica]: any = useState({});
+    const [Movies, setMovies]: any = useState({});
+    const [BestWatch, setBestWatch]: any = useState({});
+    const [Curtas, setCurtas]: any = useState({});
+
+    React.useEffect(() => {
+        setForYou(faker.results);
+        setYouLike(faker.results);
+        setRecent(faker.results);
+        setMorePopular(faker.results);
+        setMoreWeekWatched(faker.results);
+        setMoreReviwed(faker.results);
+        setMeowIndica(faker.results);
+        setMovies(faker.results);
+        setBestWatch(faker.results);
+        setCurtas(faker.results);
+    }, []);
 
     React.useEffect( () => {
         meowApi.get( 
@@ -130,12 +144,6 @@ export function HomePage({ navigation }: Props) {
         navigation.openDrawer();
     }
 
-    // return <HLoading /> //// loading
-    
-    function handleMyList(){
-        //TODO: Futura navegacao para aba de minha lista console.log('navigate to my list')
-    }
-
     function handleShowDetailItem(id: number){
         navigation.navigate(RouterKey.DetailItemPage, { id});
     }
@@ -150,7 +158,7 @@ export function HomePage({ navigation }: Props) {
                         <HLandscapeItem 
                             id={item.id} 
                             image={item.url_image2}
-                            onPress={handleShowDetailItem}
+                            onPress={(item.id == 0) ? () => {} : handleShowDetailItem}
                         />
                     )}
                 />
@@ -163,7 +171,7 @@ export function HomePage({ navigation }: Props) {
                     <HPortraitItem 
                         id={item.id} 
                         image={item.url_image}
-                        onPress={handleShowDetailItem}
+                        onPress={(item.id == 0) ? () => {} : handleShowDetailItem}
                     />
                 )}
             />
@@ -175,7 +183,7 @@ export function HomePage({ navigation }: Props) {
                     <HPortraitItem 
                         id={item.id} 
                         image={item.url_image}
-                        onPress={(id: number) => handleShowDetailItem(id)}
+                        onPress={(id: number) => (item.id == 0) ? () => {} : handleShowDetailItem(id)}
                     />
                 )}
             />
@@ -183,14 +191,13 @@ export function HomePage({ navigation }: Props) {
             <HSimpleList
                 title="Atualizações mais recentes"
                 items={Recent}
-                onPressTitle={handleMyList}
                 renderIconTitle={<Feather name="chevron-right" size={16} color={theme.colors.white} />}
                 renderItem={({item}) => (
                     <HLongLandscapeItem 
                         id={item.id} 
                         image={item.url_image2}
                         title={item.name}
-                        onPress={(id: number) => handleShowDetailItem(id)}
+                        onPress={(id: number) => (item.id == 0) ? () => {} : handleShowDetailItem(id)}
                     />
                 )}
             />
@@ -206,7 +213,7 @@ export function HomePage({ navigation }: Props) {
                         image={item.url_image}
 
                         position={index + 1}
-                        onPress={(id: number) => handleShowDetailItem(id)}
+                        onPress={(id: number) => (item.id == 0) ? () => {} : handleShowDetailItem(id)}
                     />
                 )}
             />
@@ -214,13 +221,12 @@ export function HomePage({ navigation }: Props) {
             <HSimpleList
                 title="Melhores avaliados"
                 items={MoreReviwed}
-                onPressTitle={handleMyList}
                 renderIconTitle={<Feather name="chevron-right" size={16} color={theme.colors.white} />}
                 renderItem={({item}) => (
                     <HLongPortraitItem 
                         id={item.id} 
                         image={item.url_image}
-                        onPress={handleShowDetailItem}
+                        onPress={(item.id == 0) ? () => {} : handleShowDetailItem}
                     />
                 )}
             />
@@ -242,7 +248,7 @@ export function HomePage({ navigation }: Props) {
                     <HLandscapeItem 
                         id={item.id} 
                         image={item.url_image2}
-                        onPress={handleShowDetailItem}
+                        onPress={(item.id == 0) ? () => {} : handleShowDetailItem}
                     />
                 )}
             />
@@ -254,7 +260,7 @@ export function HomePage({ navigation }: Props) {
                     <HPortraitItem 
                         id={item.id} 
                         image={item.url_image}
-                        onPress={(id: number) => handleShowDetailItem(id)}
+                        onPress={(id: number) => (item.id == 0) ? () => {} : handleShowDetailItem(id)}
                     />
                 )}
             />
@@ -266,7 +272,7 @@ export function HomePage({ navigation }: Props) {
                     <HLandscapeItem 
                         id={item.id} 
                         image={item.url_image2}
-                        onPress={handleShowDetailItem}
+                        onPress={(item.id == 0) ? () => {} : handleShowDetailItem}
                     />
                 )}
             />
@@ -278,7 +284,7 @@ export function HomePage({ navigation }: Props) {
                     <HPortraitItem 
                         id={item.id} 
                         image={item.url_image}
-                        onPress={(id: number) => handleShowDetailItem(id)}
+                        onPress={(id: number) => (item.id == 0) ? () => {} : handleShowDetailItem(id)}
                     />
                 )}
             />

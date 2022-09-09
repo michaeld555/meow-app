@@ -14,7 +14,7 @@ export function HLandscapeItem({
     return (
         <TouchableOpacity onPress={() => !!onPress && onPress(id)}>
             <View style={{ paddingBottom: !!title ? 10 : 0 }}>
-                <SImage source={{ uri: `${image}` }} />
+                <SImage source={(id == 0) ? require('../../../../assets/shimmer2.png') : { uri: `${image}` }} />
                 {
                     !!title && <STitle>{safeTitle}</STitle>
                 }

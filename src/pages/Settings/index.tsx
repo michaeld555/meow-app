@@ -9,6 +9,8 @@ import * as NavigationBar from 'expo-navigation-bar';
 import { useBackHandler } from '@react-native-community/hooks'
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
+import { HLoading } from 'components/HLoading'
 
 interface Props {
   route: {
@@ -28,21 +30,29 @@ export function SettingsPage({ route }: Props) {
   }
 
   useBackHandler(() => {
-    navigation.goBack();
+    
     setStatusBarHidden(false, 'fade')
     NavigationBar.setVisibilityAsync("visible")
     ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
+    navigation.goBack();
     return true;
   })
 
   setStatusBarHidden(true, 'fade')
   NavigationBar.setVisibilityAsync("hidden")
   NavigationBar.setBehaviorAsync('overlay-swipe')
+  const runFirst = `
+    document.body.style.backgroundColor = 'blue';
+      true;`;
 
   
     return (
+      <SContent>
     <WebView
-    allowsFullscreenVideo
+    style={{
+      backgroundColor: '#3971E0'
+    }}
+    allowsFullscreenVideo={false}
     useWebKit
     allowsInlineMediaPlayback
     mediaPlaybackRequiresUserAction
@@ -50,8 +60,9 @@ export function SettingsPage({ route }: Props) {
     scrollEnabled={false}
     source={{ uri: `${video_url}` }}
     onLoad={() => {changeScreenOrientation()}}
-    
+    injectedJavaScriptBeforeContentLoaded={runFirst}
      />
+     </SContent>
   );
 
 };

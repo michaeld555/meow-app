@@ -23,12 +23,14 @@ const token = '44|0x21WPgIUyHWYhFnOLzSjCR78Qp9FCr7Hhjr1o7n';
 export function HHighlightPanel({ children, onPress }: Props){
 
     const [Header, setHeader] = useState<Movie>();
+    const [loading, setLoading] = useState(true);
 
     React.useEffect( () => {
         meowApi.get( 
               'title?type=header',
             ).then(function (response: any) {
               setHeader(response.data.data[0])
+              setLoading(false)
             }).catch(console.log);
 
     }, [])
@@ -58,7 +60,7 @@ export function HHighlightPanel({ children, onPress }: Props){
         <SContainer>
 
             <TouchableHighlight onPress={() => !!onPress && onPress(!!Header ? Header.id : 0)}>
-                <SImageBackground source={getImage()}>
+                <SImageBackground source={loading ? require('../../../../../assets/shimmer1.png') : getImage()}>
                     <HHeaderGrandientBackground />
                     <HBottomGradientBackground>
 
