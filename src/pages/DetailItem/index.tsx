@@ -3,7 +3,7 @@ import { HBody } from 'components/HBody';
 import { HBottomGradientBackground } from 'components/HBottomGrandientBackground';
 import { HTopGrandientBackground } from 'components/HTopGrandientBackground';
 import React, { useEffect, useState } from "react";
-import { SBannerItem, SButtonsContainer, SCircle, SContentItem, SImageBackground, SItemInfo, SMoreOptions, SSubtitle, STitle, ETitle, STitleBadge } from './styles';
+import { styles, SBannerItem, SButtonsContainer, SCircle, SContentItem, SImageBackground, SItemInfo, SMoreOptions, SSubtitle, STitle, ETitle, STitleBadge } from './styles';
 import theme from 'styles/GlobalStyles';
 import { Movie } from 'types/movie.type';
 import { HSimpleList } from 'components/HSimpleList';
@@ -14,7 +14,12 @@ import { meowApi } from "../../services/";
 import {TouchableOpacity, Alert, Modal, StyleSheet, Text, Pressable, View, Share} from 'react-native';
 import { Episodes } from 'components/Episodes';
 import { PageableTheMovieDb } from "types/global.type";
+import faker from "../../types/faker.json";
 import * as ScreenOrientation from 'expo-screen-orientation';
+import { LinearGradient } from 'expo-linear-gradient';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 
 
 interface Props {
@@ -24,7 +29,7 @@ interface Props {
         }
     };
 }
-
+//const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient)
 export function DetailItem({ route }: Props){
 
     const gold = theme.colors.gold;
@@ -33,16 +38,19 @@ export function DetailItem({ route }: Props){
     const { id } = route.params;
 
     const navigation = useNavigation();
+    
 
     const [item, setItem] = useState<Movie>();
-    const [moreItems, setMoreItems] = useState([]);
+    const [moreItems, setMoreItems]: any = useState({});
     const [myList, setMyList]: any = useState('plus');
     const [starRating, setStarRating]: any = useState([white, white, white, white, white]);
     const [modalVisible, setModalVisible] = useState(false);
     const [movies, setMovies] = useState<PageableTheMovieDb<Movie>>(new PageableTheMovieDb());
+    const [loading, setLoading] = useState(true);
 
 
     React.useEffect( () => {
+        setMoreItems(faker.results)
         meowApi.get( 
             'title?type=random',
           ).then(function (response: any) {
@@ -51,11 +59,15 @@ export function DetailItem({ route }: Props){
     }, [id]);
 
     React.useEffect( () => {
+        setStarRating([white, white, white, white, white])
+        setLoading(true)
+        setMyList('plus')
         meowApi.get( 
             `title/${id}`,
           ).then(function (response: any) {
             setItem(response.data.data[0])
             setMovies(response.data.data[0])
+            setLoading(false)
           }).catch(console.log);
     }, [id]);
 
@@ -185,7 +197,7 @@ export function DetailItem({ route }: Props){
         
         <HBody goBack={handleGoBack} title={getTitle()}>
             <SBannerItem>
-                <SImageBackground source={getImage()}>
+                <SImageBackground source={loading ? require('../../../assets/shimmer1.png') : getImage()}>
                     <HBottomGradientBackground height={100}>
                         
                         <SButtonsContainer>
@@ -214,24 +226,45 @@ export function DetailItem({ route }: Props){
                 </SImageBackground>
                 <HTopGrandientBackground>
                     
+                { !loading  &&
                     <SContentItem>
-
                         <STitle>{getTitle()}</STitle>
-
                         <SItemInfo>
                             <SSubtitle>2022</SSubtitle>
                             <SSubtitle>Série</SSubtitle>
                             <SSubtitle>Meow Indica</SSubtitle>
                             <SSubtitle>5.1</SSubtitle>
-                        </SItemInfo>
-                        
+                        </SItemInfo>                 
                         <SSubtitle style={{ marginTop: 10 }}>{getDescription()}</SSubtitle>
-
                     </SContentItem>
+                }
+                { loading  &&
+                    <SContentItem>
+                        <ShimmerPlaceHolder style={styles.shimmerDescription} />
+                        <ShimmerPlaceHolder style={styles.shimmerText} />
+                        <ShimmerPlaceHolder style={styles.shimmerText} />
+                        <ShimmerPlaceHolder style={styles.shimmerText} />
+                        <ShimmerPlaceHolder style={styles.shimmerText} />
+                    </SContentItem>
+                }
 
                     <ETitle>Episodios: </ETitle>
 
-                    { movies  && 
+                    { loading  && 
+
+                       <View style={{ paddingBottom: 26 }}>
+                           <Episodes
+                                id={0} 
+                                image={faker.results[0].url_image}
+                                description={""}
+                                ep_number={0}
+                                video_url={""}
+                                onPress={() => {}}
+                            />
+                       </View>
+                    }
+
+                    { movies  && !loading && 
                     
                     movies.episodes.map((x) => (
                        <View key={x.id} style={{ paddingBottom: 26 }}>
@@ -255,7 +288,7 @@ export function DetailItem({ route }: Props){
                             <HPortraitItem 
                                 id={item.id} 
                                 image={item.url_image}
-                                onPress={(id: number) => handleChangeDetailItem(id)}
+                                onPress={(id: number) => (item.id == 0) ? () => {} : handleChangeDetailItem(id)}
                             />
                         )}
                     />   
@@ -290,36 +323,3 @@ export function DetailItem({ route }: Props){
         </HBody>
     )
 }
-
-const styles = StyleSheet.create({
-    centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 22
-    },
-    modalView: {
-      margin: 20,
-      backgroundColor: "#50B4F2",
-      borderRadius: 20,
-      padding: 35,
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5
-    },
-    textStyle: {
-      color: "white",
-      fontWeight: "bold",
-      textAlign: "center"
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: "center"
-    }
-});

@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import theme from 'styles/GlobalStyles';
+import { StyleSheet } from "react-native";
 
 export const STitle = styled.Text`
     color: ${theme.colors.white};
@@ -27,3 +28,22 @@ export const SubTitle = styled.Text`
     opacity: 0.8; 
     font-size: 10px;
 `
+
+export const styles = StyleSheet.create({
+shimmerDescription:{
+    borderRadius: 20,
+    height: 10,
+    width: 150
+},
+shimmerText:{
+    borderRadius: 20,
+    height: 5,
+    width: 150,
+    marginTop: 9
+},
+shimmerVideo:{
+    height: 100,
+    width: 190,
+    marginRight: 9
+},
+})
