@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import { Text, View, BackHandler } from "react-native";
 import { HBody } from "../../components/HBody";
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { HTextInput } from "components/HTextInput";
@@ -11,6 +11,8 @@ import { RouterKey } from "routes/routes-keys";
 import { meowApi } from "../../services/";
 import { search } from "./styles";
 import Lottie from "lottie-react-native";
+import { debounce } from "lodash";
+import { useIsFocused } from '@react-navigation/native'
 
 interface Props extends DrawerContentComponentProps {
 }
@@ -25,7 +27,24 @@ export function SearchPage({ navigation }: Props) {
     const [response, setResponse] = useState(false);
     const [emptyResponse, setEmptyResponse] = useState(false);
     const [searchText, setSearchText] = useState(`Mais procurados`);
-    
+    const handler = useCallback(debounce(onChangeTextSearch, 1000), []);
+    const isFocused = useIsFocused();
+
+  const onBackPress = useCallback(
+        () => {
+        if(isFocused){
+            navigation.goBack();
+            return true
+        }
+        return false
+        }, [isFocused],
+    )
+
+    React.useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
+
     function openSidebar() {
         navigation.openDrawer();
     }
@@ -88,7 +107,7 @@ export function SearchPage({ navigation }: Props) {
             customHeaderContent={
                 <HTextInput
                     value={textSearch}
-                    onChangeText={onChangeTextSearch}
+                    onChangeText={handler}
                     placeholder="O Que você está procurando?"
                 />}    
         >

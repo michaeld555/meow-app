@@ -2,7 +2,7 @@ import { Feather, Foundation, Ionicons } from '@expo/vector-icons';
 import { HBody } from 'components/HBody';
 import { HBottomGradientBackground } from 'components/HBottomGrandientBackground';
 import { HTopGrandientBackground } from 'components/HTopGrandientBackground';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { styles, SBannerItem, SButtonsContainer, SCircle, SContentItem, SImageBackground, SItemInfo, SMoreOptions, SSubtitle, STitle, ETitle, STitleBadge } from './styles';
 import theme from 'styles/GlobalStyles';
 import { Movie } from 'types/movie.type';
@@ -11,13 +11,14 @@ import { HPortraitItem } from 'components/Items/HPortraitItem';
 import { RouterKey } from 'routes/routes-keys';
 import { useNavigation } from '@react-navigation/native';
 import { meowApi } from "../../services/";
-import {TouchableOpacity, Alert, Modal, StyleSheet, Text, Pressable, View, Share} from 'react-native';
+import {TouchableOpacity, Alert, Modal, StyleSheet, Text, Pressable, View, Share, BackHandler} from 'react-native';
 import { Episodes } from 'components/Episodes';
 import { PageableTheMovieDb } from "types/global.type";
 import faker from "../../types/faker.json";
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { LinearGradient } from 'expo-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
+import { useIsFocused } from '@react-navigation/native'
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 
@@ -47,6 +48,22 @@ export function DetailItem({ route }: Props){
     const [modalVisible, setModalVisible] = useState(false);
     const [movies, setMovies] = useState<PageableTheMovieDb<Movie>>(new PageableTheMovieDb());
     const [loading, setLoading] = useState(true);
+    const isFocused = useIsFocused();
+
+  const onBackPress = useCallback(
+        () => {
+        if(isFocused){
+            navigation.goBack();
+            return true
+        }
+        return false
+        }, [isFocused],
+    )
+
+    React.useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
 
 
     React.useEffect( () => {
@@ -121,9 +138,6 @@ export function DetailItem({ route }: Props){
         }
     }
 
-    function handleGoBack(){
-        navigation.goBack();
-    }
 
     function getTitle() {
         return (item as Movie)?.name;
@@ -195,13 +209,13 @@ export function DetailItem({ route }: Props){
     
     return (
         
-        <HBody goBack={handleGoBack} title={getTitle()}>
+        <HBody title={getTitle()}>
             <SBannerItem>
                 <SImageBackground source={loading ? require('../../../assets/shimmer1.png') : getImage()}>
                     <HBottomGradientBackground height={100}>
                         
                         <SButtonsContainer>
-                            <TouchableOpacity onPress={() => setModalVisible(true)}>
+                            <TouchableOpacity onPress={() => setModalVisible(false)}>
                                 <SMoreOptions>
                                     <Foundation name="star" size={30} color={starRating[0]} style={{ marginRight: 10 }}/>
                                     <Foundation name="star" size={30} color={starRating[1]} style={{ marginRight: 10 }}/>

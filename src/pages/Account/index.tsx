@@ -1,11 +1,14 @@
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import React from "react";
-import { NativeScrollEvent, NativeSyntheticEvent, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { NativeScrollEvent, NativeSyntheticEvent, Text, TouchableOpacity} from "react-native";
 import { HBody } from "components/HBody";
 import { HHeaderAccount } from './HHeaderAccount';
-import { SContent } from './styles';
+import { SContent, styles } from './styles';
 import { Ionicons } from "@expo/vector-icons";
 import { RouterKey } from 'routes/routes-keys';
+import { Feather } from '@expo/vector-icons';
+import theme from 'styles/GlobalStyles';
+import * as Linking from 'expo-linking';
 
 interface Props extends DrawerContentComponentProps {
 }
@@ -19,8 +22,16 @@ export function AccountPage({ navigation }: Props) {
         >
             <SContent>
             <TouchableOpacity onPress={() => { }} style={styles.buttons}>
-                <Ionicons name="cog-outline" size={24} color='#fff' />
-                <Text style={{ color: '#fff', fontSize: 20 }}> Configurações</Text>
+                <Ionicons name="person" size={24} color='#fff' />
+                <Text style={{ color: '#fff', fontSize: 20 }}> Sua Conta <Feather style={styles.icon} name="chevron-right" size={20} color={theme.colors.white} /></Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { }} style={styles.buttons}>
+                <Ionicons name="cog" size={24} color='#fff' />
+                <Text style={{ color: '#fff', fontSize: 20 }}> Configurações <Feather style={styles.icon} name="chevron-right" size={20} color={theme.colors.white} /></Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => { Linking.openURL('https://t.me/mzd628') }} style={styles.buttons}>
+                <Ionicons name="help-circle-outline" size={24} color='#fff' />
+                <Text style={{ color: '#fff', fontSize: 20 }}> Suporte <Feather style={styles.icon} name="chevron-right" size={20} color={theme.colors.white} /></Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { navigation.navigate(RouterKey.SignOutPage) }} style={styles.buttons}>
                 <Ionicons name="log-out-outline" size={24} color='#fff' />
@@ -32,9 +43,3 @@ export function AccountPage({ navigation }: Props) {
     )
 }
 
-const styles = StyleSheet.create({
-    buttons:{
-        flexDirection: 'row',
-        margin: 30
-    }
-})

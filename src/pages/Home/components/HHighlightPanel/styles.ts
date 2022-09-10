@@ -33,12 +33,14 @@ export const SHighlightSubtitle = styled.Text`
 export const styles = StyleSheet.create({
     shimmerText:{
         borderRadius: 20,
-        height: 5,
+        height: 15,
         width: 150,
         marginTop: 9
     },
-    shimmerVideo:{
-        height: 560,
-        width: '100%',
-    },
+    shimmerSubText:{
+        borderRadius: 20,
+        height: 5,
+        width: 300,
+        marginTop: 9
+    }
     })

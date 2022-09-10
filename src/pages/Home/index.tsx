@@ -8,14 +8,15 @@ import { HLongLandscapeItem } from 'components/Items/HLongLandscapeItem';
 import { HLongPortraitItem } from 'components/Items/HLongPortraitItem';
 import { HPortraitItem } from 'components/Items/HPortraitItem';
 import { HSquareItem } from 'components/Items/HSquareItem';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { RouterKey } from 'routes/routes-keys';
 import theme from 'styles/GlobalStyles';
 import { Movie } from "types/movie.type";
 import faker from "types/faker.json";
 import { HHighlightPanel } from "./components/HHighlightPanel";
 import { meowApi } from "../../services/";
-
+import { useIsFocused } from '@react-navigation/native';
+import { BackHandler, Alert } from "react-native";
 interface Props extends DrawerContentComponentProps {
 }
 
@@ -33,6 +34,22 @@ export function HomePage({ navigation }: Props) {
     const [Movies, setMovies]: any = useState({});
     const [BestWatch, setBestWatch]: any = useState({});
     const [Curtas, setCurtas]: any = useState({});
+    const isFocused = useIsFocused();
+
+  const onBackPress = useCallback(
+        () => {
+        if(isFocused){
+            
+            return true
+        }
+        return false
+        }, [isFocused],
+    )
+
+    React.useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
 
     React.useEffect(() => {
         setForYou(faker.results);

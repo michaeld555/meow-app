@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import React, { useEffect, useState, useCallback } from "react";
+import { Text, View, StyleSheet, BackHandler} from "react-native";
 import { HBody } from "../../components/HBody";
 import { DrawerContentComponentProps } from '@react-navigation/drawer';
 import { SContent, STitle } from "./styles";
@@ -28,6 +28,21 @@ export function MyList({ navigation }: Props) {
     const [response, setResponse] = useState(false);
     const [emptyResponse, setEmptyResponse] = useState(false);
     const isFocused = useIsFocused();
+
+  const onBackPress = useCallback(
+        () => {
+        if(isFocused){
+            navigation.goBack();
+            return true
+        }
+        return false
+        }, [isFocused],
+    )
+
+    React.useEffect(() => {
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+        return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [])
 
     function openSidebar() {
         navigation.openDrawer();

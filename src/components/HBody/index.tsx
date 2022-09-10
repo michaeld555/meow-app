@@ -10,7 +10,6 @@ import { HContent, HScrollArea } from './styles';
 interface Props extends ViewProps {
   children: ReactNode;
   openSidebar?: () => void;
-  goBack?: () => void;
   useSafeAreaHeader?: boolean;
   showHeader?: boolean;
   customHeaderContent?: JSX.Element;
@@ -20,7 +19,6 @@ interface Props extends ViewProps {
 export function HBody({ 
   children, 
   openSidebar, 
-  goBack,
   useSafeAreaHeader = false,
   showHeader = true,//TODO:mostra a header
   customHeaderContent,
@@ -77,7 +75,6 @@ export function HBody({
             showHeader && (
               <HHeader 
                 openSidebar={openSidebar} 
-                goBack={goBack} 
                 title={title}
                 showBackgroundAndTextHeader={showBackgroundAndTextHeader} 
                 customContent={customHeaderContent}

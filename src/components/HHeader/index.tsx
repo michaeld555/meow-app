@@ -7,15 +7,13 @@ import { SContainer, SContent, SLeftSide, SLogo, SRightSide, STitle } from './st
 
 interface Props {
   openSidebar?: () => void;
-  goBack?: () => void;
   showBackgroundAndTextHeader: boolean;
   title?: string;
   customContent?: JSX.Element;
 }
 
 export function HHeader({ 
-    openSidebar, 
-    goBack,
+    openSidebar,
     title,
     showBackgroundAndTextHeader,
     customContent,
@@ -49,10 +47,6 @@ export function HHeader({
     };
   }); 
 
- /*  function handleOpenGitHub(){
-    Linking.openURL('https://github.com/mcosta21/hbo-max-react-native-clone');
-  } */
-
   return (
     <SContainer>
       <Animated.View style={[backgroundStyle]}>
@@ -60,44 +54,6 @@ export function HHeader({
 
           {
             !!customContent && (customContent)
-          }
-
-          {
-            !customContent && (
-              <>
-                {/* <SLeftSide>
-                  {
-                    !!openSidebar && (
-                      <TouchableOpacity onPress={() => openSidebar()}>
-                        <Feather name="menu" size={26} color={theme.colors.white} />
-                      </TouchableOpacity>
-                    )
-                  }
-                  
-                  {
-                    !!goBack && (
-                      <TouchableOpacity onPress={() => goBack()} >
-                        <Feather name="chevron-left" size={26} color={theme.colors.white} />
-                      </TouchableOpacity>
-                    )
-                  }
-                </SLeftSide>  //TODO: header de cima comentada
-
-                {
-                  !!title ? (
-                    <STitle style={[colorStyle]}>{title.length > 40 ? `${title.substring(0, 40)}...` : title}</STitle>
-                  ) : (
-                    <SLogo source={require("assets/logo.png")} resizeMode="contain" />
-                  )
-                }
-
-                { <SRightSide>
-                  <TouchableOpacity onPress={() => handleOpenGitHub()} >
-                      <AntDesign name="github" size={26} color={theme.colors.white} />
-                    </TouchableOpacity>
-                </SRightSide> } */}
-              </>
-            )
           }
           
         </SContent>

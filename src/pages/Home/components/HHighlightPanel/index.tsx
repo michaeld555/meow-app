@@ -66,8 +66,15 @@ export function HHighlightPanel({ children, onPress }: Props){
         return (
             <SContainer>
     
-                <TouchableHighlight onPress={() => {}}>
-                <ShimmerPlaceHolder style={styles.shimmerVideo} />
+                <TouchableHighlight onPress={() => !!onPress && onPress(!!Header ? Header.id : 0)}>
+                    <SImageBackground source={require('../../../../../assets/shimmer1.png')}>
+                        <HHeaderGrandientBackground />
+                        <HBottomGradientBackground>
+                            <ShimmerPlaceHolder style={styles.shimmerText}/>                           
+                            <ShimmerPlaceHolder style={styles.shimmerSubText}/>
+                            <ShimmerPlaceHolder style={styles.shimmerSubText}/>                   
+                        </HBottomGradientBackground>
+                    </SImageBackground>
                 </TouchableHighlight>
                 
                 <HTopGrandientBackground>

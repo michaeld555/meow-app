@@ -1,7 +1,7 @@
 import { StackHeaderProps } from '@react-navigation/stack';
 import { HGradientBackground } from 'components/HGradientBackground';
 import { HPrimaryButton } from 'components/HPrimaryButton';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useState, useCallback } from 'react';
 import { View, TextInput, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
 import { RouterKey } from '../../routes/routes-keys';
 import { SContent } from './styles';
@@ -27,18 +27,27 @@ export function SignInPage({ navigation }: Props) {
   const [modalHide, setModalHide] = useState(false);
   const isFocused = useIsFocused();
 
-  /* useBackHandler(() => {
-    
-    Alert.alert("Não vaii 😭", "Tem certeza que já quer ir embora?", [
-      {
-        text: "Cancelar",
-        onPress: () => null,
-        style: "cancel"
-      },
-      { text: "Sair", onPress: () => BackHandler.exitApp() }
-    ]);
-    return true;
-  }) */
+  const onBackPress = useCallback(
+    () => {
+      if(isFocused){
+        Alert.alert("Não vaii 😭", "Tem certeza que já quer ir embora?", [
+          {
+            text: "Cancelar",
+            onPress: () => null,
+            style: "cancel"
+          },
+          { text: "Sair", onPress: () => BackHandler.exitApp() }
+        ]);
+        return true
+      }
+      return false
+    }, [isFocused],
+  )
+
+  React.useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  }, [])
 
   /* React.useEffect(() => {
     

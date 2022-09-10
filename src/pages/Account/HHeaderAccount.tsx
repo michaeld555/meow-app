@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 import styled from 'styled-components/native';
 import theme from 'styles/GlobalStyles';
@@ -8,15 +8,10 @@ import theme from 'styles/GlobalStyles';
 export function HHeaderAccount(){
     return (
         <SHeaderAccountContainer>
-            <TouchableOpacity>
-                <Ionicons name="ios-settings-outline" size={24} color={theme.colors.white} />
-            </TouchableOpacity>
             <SAccountContainer>
-
-                <SPicture source={require("assets/logo.png")} />
-                
+                <SPicture source={{ uri: `https://uploaddeimagens.com.br/images/004/017/404/full/Design_sem_nome_%284%29.png?1662826050` }} />
+                <Text style={styles.texto}>Michael</Text>
             </SAccountContainer>
-            <SSpacing />
         </SHeaderAccountContainer>
     )
 }
@@ -32,18 +27,27 @@ const SAccountContainer = styled.View`
 `
 
 const SSpacing = styled.View`
-    min-width: 35px;
+    min-width: 10px;
 `
 
 const SPicture = styled.ImageBackground`
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
 
     border-bottom-end-radius: 20px;
     border-top-end-radius: 20px;
     border-bottom-start-radius: 20px;
     border-top-start-radius: 20px;
     overflow: hidden;
-
+    margin-top: 70px;
+    margin-bottom: 10px
     border: 2px solid ${theme.colors.purple_normal};
 `
+
+const styles = StyleSheet.create({
+    texto:{
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#FFF'
+    }
+})

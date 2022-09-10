@@ -1,16 +1,33 @@
 import { StackHeaderProps } from '@react-navigation/stack';
 import { HGradientBackground } from 'components/HGradientBackground';
-import { useEffect } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import React, { useEffect, useCallback } from 'react';
+import { Text, View, StyleSheet, BackHandler } from 'react-native';
 import { RouterKey } from '../../routes/routes-keys';
 import { SContent } from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Lottie from "lottie-react-native";
+import { useIsFocused } from '@react-navigation/native';
 
 interface Props extends StackHeaderProps {
 }
 
 export function SignOutPage({ navigation }: Props) {
+
+  const isFocused = useIsFocused();
+
+  const onBackPress = useCallback(
+    () => {
+      if(isFocused){
+        return true
+      }
+      return false
+    }, [isFocused],
+  )
+
+  React.useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+  }, [])
 
   useEffect(() => {
 
