@@ -27,7 +27,7 @@ export function HomePage({ navigation }: Props) {
     const [Recent, setRecent]: any = useState({});
     const [MorePopular, setMorePopular]: any = useState({});
     const [MoreWeekWatched, setMoreWeekWatched]: any = useState({});
-    const [Painel, setPainel] = useState<Movie>();
+    const [Painel, setPainel]: any = useState(faker.results[0]);
     const [MoreReviwed, setMoreReviwed]: any = useState({});
     const [MeowIndica, setMeowIndica]: any = useState({});
     const [Movies, setMovies]: any = useState({});
@@ -231,16 +231,14 @@ export function HomePage({ navigation }: Props) {
                 )}
             />
            
-                    {
-                    !!Painel && (<HHighlightItem 
+                    <HHighlightItem 
                         title={Painel.name}
                         id={Painel.id}
                         subtitle={Painel.description}
                         image={Painel.url_image2}
                         onPress={handleShowDetailItem}
-                    />)
-                    }
-
+                    />
+                    
             <HSimpleList
                 title="Meow Indica"
                 items={MeowIndica}

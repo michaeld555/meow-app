@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import theme from 'styles/GlobalStyles';
+import { StyleSheet } from "react-native";
 
 export const STextContainer = styled.View`
     display: flex;
@@ -36,4 +37,18 @@ export const SButtonContainer = styled.View`
     align-items: center;
     margin-top: 10px;
 `
-
+export const styles = StyleSheet.create({
+    shimmerVideo:{
+        height: 230,
+        width: '100%',
+    },
+    shimmerText:{
+        height: 13,
+        borderRadius: 20
+    },
+    shimmerSubText:{
+        height: 9,
+        width: 300,
+        borderRadius: 20
+    }
+    })

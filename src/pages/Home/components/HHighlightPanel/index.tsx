@@ -4,8 +4,14 @@ import { Movie } from "types/movie.type";
 import { HBottomGradientBackground } from "../../../../components/HBottomGrandientBackground";
 import { HTopGrandientBackground } from "../../../../components/HTopGrandientBackground";
 import { HHeaderGrandientBackground } from "../HHeaderGrandientBackground";
-import { SContainer, SHighlightSubtitle, SHighlightTitle, SImageBackground } from "./styles";
+import { styles, SContainer, SHighlightSubtitle, SHighlightTitle, SImageBackground } from "./styles";
 const axios = require('axios');
+import { LinearGradient } from 'expo-linear-gradient';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
+import theme from 'styles/GlobalStyles';
+import { HLandscapeItem } from 'components/Items/HLandscapeItem';
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 
 interface Props {
     children: ReactNode;
@@ -56,30 +62,45 @@ export function HHighlightPanel({ children, onPress }: Props){
     }
 
 
-    return (
-        <SContainer>
+    if(loading){
+        return (
+            <SContainer>
+    
+                <TouchableHighlight onPress={() => {}}>
+                <ShimmerPlaceHolder style={styles.shimmerVideo} />
+                </TouchableHighlight>
+                
+                <HTopGrandientBackground>
+                    {children}
+                </HTopGrandientBackground>
+            </SContainer>
+        )
+    } else {
+        return (
+            <SContainer>
+    
+                <TouchableHighlight onPress={() => !!onPress && onPress(!!Header ? Header.id : 0)}>
+                    <SImageBackground source={loading ? require('../../../../../assets/shimmer1.png') : getImage()}>
+                        <HHeaderGrandientBackground />
+                        <HBottomGradientBackground>
 
-            <TouchableHighlight onPress={() => !!onPress && onPress(!!Header ? Header.id : 0)}>
-                <SImageBackground source={loading ? require('../../../../../assets/shimmer1.png') : getImage()}>
-                    <HHeaderGrandientBackground />
-                    <HBottomGradientBackground>
-
-                        <SHighlightTitle>
-                            {!!Header ? Header.name : ''}
-                        </SHighlightTitle>
-
-                        <SHighlightSubtitle>
-                        {getOverview()}
-                        </SHighlightSubtitle>
-                        
-                    </HBottomGradientBackground>
-                </SImageBackground>
-            </TouchableHighlight>
-            
-            <HTopGrandientBackground>
-                {children}
-            </HTopGrandientBackground>
-        </SContainer>
-    )
+                            <SHighlightTitle>
+                                {!!Header ? Header.name : ''}
+                            </SHighlightTitle>
+    
+                            <SHighlightSubtitle>
+                            {getOverview()}
+                            </SHighlightSubtitle>
+                            
+                        </HBottomGradientBackground>
+                    </SImageBackground>
+                </TouchableHighlight>
+                
+                <HTopGrandientBackground>
+                    {children}
+                </HTopGrandientBackground>
+            </SContainer>
+        )
+    }
 }
 

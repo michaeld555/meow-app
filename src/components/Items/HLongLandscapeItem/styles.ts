@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import theme from 'styles/GlobalStyles';
+import { StyleSheet } from "react-native";
 
 export const STitle = styled.Text`
     color: ${theme.colors.white};
@@ -13,3 +14,10 @@ export const SImage = styled.Image`
     height: 140px;
     margin-horizontal: 6px;
 `
+export const styles = StyleSheet.create({
+    shimmerVideo:{
+        height: 140,
+        width: 290,
+        marginRight: 9
+    },
+    })

@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import theme from 'styles/GlobalStyles';
+import { StyleSheet } from "react-native";
 
 export const STitle = styled.Text`
     color: ${theme.colors.white};
@@ -32,3 +33,17 @@ export const STextPosition = styled.Text`
     font-size: 13px;
     padding-horizontal: 3px;
 `
+
+export const styles = StyleSheet.create({
+    shimmerText:{
+        borderRadius: 20,
+        height: 5,
+        width: 150,
+        marginTop: 9
+    },
+    shimmerVideo:{
+        height: 230,
+        width: 160,
+        marginRight: 9
+    },
+    })

@@ -1,5 +1,6 @@
 import styled from 'styled-components/native';
 import theme from 'styles/GlobalStyles';
+import { StyleSheet } from "react-native";
 
 export const SContainer = styled.View`
     height: 780px
@@ -28,3 +29,16 @@ export const SHighlightSubtitle = styled.Text`
     margin-left: 40px;
     margin-right: 40px;
 `;
+
+export const styles = StyleSheet.create({
+    shimmerText:{
+        borderRadius: 20,
+        height: 5,
+        width: 150,
+        marginTop: 9
+    },
+    shimmerVideo:{
+        height: 560,
+        width: '100%',
+    },
+    })
