@@ -14,27 +14,51 @@ import theme from 'styles/GlobalStyles';
 import { Movie } from "types/movie.type";
 import faker from "types/faker.json";
 import { HHighlightPanel } from "./components/HHighlightPanel";
-import { meowApi } from "../../services/";
 import { useIsFocused } from '@react-navigation/native';
 import { BackHandler, Alert } from "react-native";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 interface Props extends DrawerContentComponentProps {
 }
 
 export function HomePage({ navigation }: Props) {
 
     const [highlightMovie, setHighlightMovie] = useState<Movie>();
-    const [ForYou, setForYou]: any = useState({});
-    const [youLike, setYouLike]: any = useState({});
-    const [Recent, setRecent]: any = useState({});
-    const [MorePopular, setMorePopular]: any = useState({});
-    const [MoreWeekWatched, setMoreWeekWatched]: any = useState({});
+    const [ForYou, setForYou]: any = useState(faker.results);
+    const [youLike, setYouLike]: any = useState(faker.results);
+    const [Recent, setRecent]: any = useState(faker.results);
+    const [MorePopular, setMorePopular]: any = useState(faker.results);
+    const [MoreWeekWatched, setMoreWeekWatched]: any = useState(faker.results);
     const [Painel, setPainel]: any = useState(faker.results[0]);
-    const [MoreReviwed, setMoreReviwed]: any = useState({});
-    const [MeowIndica, setMeowIndica]: any = useState({});
-    const [Movies, setMovies]: any = useState({});
-    const [BestWatch, setBestWatch]: any = useState({});
-    const [Curtas, setCurtas]: any = useState({});
+    const [MoreReviwed, setMoreReviwed]: any = useState(faker.results);
+    const [MeowIndica, setMeowIndica]: any = useState(faker.results);
+    const [Movies, setMovies]: any = useState(faker.results);
+    const [BestWatch, setBestWatch]: any = useState(faker.results);
+    const [Curtas, setCurtas]: any = useState(faker.results);
+    const [token, setToken]: any = useState();
     const isFocused = useIsFocused();
+
+    React.useEffect(() => {
+            getToken()
+    }, [])
+
+    async function getToken() {
+        try {
+          const jsonValue = await AsyncStorage.getItem('userData')
+          const datae = jsonValue != null ? JSON.parse(jsonValue) : null;
+          setToken(datae.token)
+        } catch(e) {
+          // error reading value
+        }
+      }
+    
+      const meowApi = 
+
+      axios.create({
+        baseURL: 'https://meowfansub.me/api/',
+        headers: { Authorization: `Bearer ${token}` },
+        params: {}
+      });
 
   const onBackPress = useCallback(
         () => {
@@ -51,19 +75,6 @@ export function HomePage({ navigation }: Props) {
         return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
     }, [])
 
-    React.useEffect(() => {
-        setForYou(faker.results);
-        setYouLike(faker.results);
-        setRecent(faker.results);
-        setMorePopular(faker.results);
-        setMoreWeekWatched(faker.results);
-        setMoreReviwed(faker.results);
-        setMeowIndica(faker.results);
-        setMovies(faker.results);
-        setBestWatch(faker.results);
-        setCurtas(faker.results);
-    }, []);
-
     React.useEffect( () => {
         meowApi.get( 
               'title?type=forYou',
@@ -71,7 +82,7 @@ export function HomePage({ navigation }: Props) {
               setForYou(response.data.data)
             }).catch(console.log);
 
-    }, [])
+    }, [token])
 
     React.useEffect( () => {
         meowApi.get( 
@@ -79,7 +90,7 @@ export function HomePage({ navigation }: Props) {
           ).then(function (response: any) {
             setYouLike(response.data.data)
           }).catch(console.log);
-    }, []);
+    }, [token]);
 
     React.useEffect( () => {
         meowApi.get( 
@@ -87,7 +98,7 @@ export function HomePage({ navigation }: Props) {
           ).then(function (response: any) {
             setRecent(response.data.data)
           }).catch(console.log);
-    }, []);
+    }, [token]);
 
     React.useEffect( () => {
         meowApi.get( 
@@ -96,7 +107,7 @@ export function HomePage({ navigation }: Props) {
                 setMorePopular(response.data.data)
             }).catch(console.log);
 
-    }, [])
+    }, [token])
 
     React.useEffect( () => {
         meowApi.get( 
@@ -104,7 +115,7 @@ export function HomePage({ navigation }: Props) {
           ).then(function (response: any) {
             setMoreWeekWatched(response.data.data)
           }).catch(console.log);
-    }, []);
+    }, [token]);
 
     React.useEffect( () => {
         meowApi.get( 
@@ -113,7 +124,7 @@ export function HomePage({ navigation }: Props) {
               setPainel(response.data.data[0])
             }).catch(console.log);
 
-    }, [])
+    }, [token])
 
     React.useEffect( () => {
         meowApi.get( 
@@ -121,7 +132,7 @@ export function HomePage({ navigation }: Props) {
           ).then(function (response: any) {
             setMoreReviwed(response.data.data)
           }).catch(console.log);
-    }, []);////////
+    }, [token]);////////
 
     React.useEffect( () => {
         meowApi.get( 
@@ -129,7 +140,7 @@ export function HomePage({ navigation }: Props) {
           ).then(function (response: any) {
             setMeowIndica(response.data.data)
           }).catch(console.log);
-    }, []);
+    }, [token]);
 
     React.useEffect( () => {
         meowApi.get( 
@@ -138,7 +149,7 @@ export function HomePage({ navigation }: Props) {
                 setMovies(response.data.data)
             }).catch(console.log);
 
-    }, [])
+    }, [token])
 
     React.useEffect( () => {
         meowApi.get( 
@@ -146,7 +157,7 @@ export function HomePage({ navigation }: Props) {
           ).then(function (response: any) {
             setBestWatch(response.data.data)
           }).catch(console.log);
-    }, []);
+    }, [token]);
 
     React.useEffect( () => {
         meowApi.get( 
@@ -154,7 +165,7 @@ export function HomePage({ navigation }: Props) {
           ).then(function (response: any) {
             setCurtas(response.data.data)
           }).catch(console.log);
-    }, []);
+    }, [token]);
 
 
     function openSidebar() {

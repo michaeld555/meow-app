@@ -2,11 +2,11 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-//const [token, setToken] = useState([]);
 
 const saveLogin = async (value: any) => {
   try {
-    await AsyncStorage.setItem('userData', value)
+    const jsonValue = JSON.stringify(value)
+    await AsyncStorage.setItem('userData', jsonValue)
   } catch (e) {
     // saving error
   }
@@ -30,13 +30,13 @@ const getLogin = () => {
 }
 
 
-const token = '284|yJvbEf835mj1AG2qV8Gz4PKDvI01BL0gzhzJdORs';
+const tokens = '284|yJvbEf835mj1AG2qV8Gz4PKDvI01BL0gzhzJdORs';
 
 const meowApi = 
 
   axios.create({
     baseURL: 'https://meowfansub.me/api/',
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { Authorization: `Bearer ${tokens}` },
     params: {}
   });
   

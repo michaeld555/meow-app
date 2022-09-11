@@ -44,6 +44,11 @@ export function SettingsPage({ route }: Props) {
   const runFirst = `
     document.body.style.backgroundColor = 'blue';
       true;`;
+  const runBefore = `
+    document.querySelector('.plyr--fullscreen-enabled [data-plyr=fullscreen]').style.display='none';
+    document.querySelector('.plyr--fullscreen-enabled [data-plyr=fullscreen]').click();
+      true;
+    `;
 
   
     return (
@@ -61,6 +66,7 @@ export function SettingsPage({ route }: Props) {
     source={{ uri: `${video_url}` }}
     onLoad={() => {changeScreenOrientation()}}
     injectedJavaScriptBeforeContentLoaded={runFirst}
+    injectedJavaScript={runBefore}
      />
      </SContent>
   );

@@ -8,11 +8,12 @@ import { PageableTheMovieDb } from "types/global.type";
 import { Movie } from "types/movie.type";
 import { HPortraitItem } from "components/Items/HPortraitItem";
 import { RouterKey } from "routes/routes-keys";
-import { meowApi } from "../../services/";
+import axios from 'axios';
 import { search } from "./styles";
 import Lottie from "lottie-react-native";
 import { debounce } from "lodash";
 import { useIsFocused } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props extends DrawerContentComponentProps {
 }
@@ -27,8 +28,31 @@ export function SearchPage({ navigation }: Props) {
     const [response, setResponse] = useState(false);
     const [emptyResponse, setEmptyResponse] = useState(false);
     const [searchText, setSearchText] = useState(`Mais procurados`);
-    const handler = useCallback(debounce(onChangeTextSearch, 1000), []);
+    const handler = useCallback(debounce(onChangeTextSearch, 500), []);
+    const [token, setToken]: any = useState();
     const isFocused = useIsFocused();
+
+    React.useEffect(() => {
+        getToken()
+    }, [])
+
+    async function getToken() {
+        try {
+        const jsonValue = await AsyncStorage.getItem('userData')
+        const datae = jsonValue != null ? JSON.parse(jsonValue) : null;
+        setToken(datae.token)
+        } catch(e) {
+        // error reading value
+        }
+    }
+
+    const meowApi = 
+
+    axios.create({
+        baseURL: 'https://meowfansub.me/api/',
+        headers: { Authorization: `Bearer ${token}` },
+        params: {}
+    });
 
   const onBackPress = useCallback(
         () => {
@@ -51,7 +75,7 @@ export function SearchPage({ navigation }: Props) {
 
     React.useEffect( () => {
             popularTitles();
-    }, [])
+    }, [token])
 
     function onChangeTextSearch(text: string){
         if(text.trim() != ''){

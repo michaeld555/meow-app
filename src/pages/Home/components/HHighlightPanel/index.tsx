@@ -5,11 +5,12 @@ import { HBottomGradientBackground } from "../../../../components/HBottomGrandie
 import { HTopGrandientBackground } from "../../../../components/HTopGrandientBackground";
 import { HHeaderGrandientBackground } from "../HHeaderGrandientBackground";
 import { styles, SContainer, SHighlightSubtitle, SHighlightTitle, SImageBackground } from "./styles";
-const axios = require('axios');
+import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import theme from 'styles/GlobalStyles';
 import { HLandscapeItem } from 'components/Items/HLandscapeItem';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 
@@ -18,18 +19,33 @@ interface Props {
     onPress?: (id: number) => void;
 }
 
-const token = '44|0x21WPgIUyHWYhFnOLzSjCR78Qp9FCr7Hhjr1o7n';
-
-    const meowApi = axios.create({
-        baseURL: 'https://meowfansub.me/api/',
-        headers: { Authorization: `Bearer ${token}` },
-        params: {}
-      });
-
 export function HHighlightPanel({ children, onPress }: Props){
 
     const [Header, setHeader] = useState<Movie>();
     const [loading, setLoading] = useState(true);
+    const [token, setToken]: any = useState();
+
+    React.useEffect(() => {
+        getToken()
+    }, [])
+
+    async function getToken() {
+        try {
+        const jsonValue = await AsyncStorage.getItem('userData')
+        const datae = jsonValue != null ? JSON.parse(jsonValue) : null;
+        setToken(datae.token)
+        } catch(e) {
+        // error reading value
+        }
+    }
+
+    const meowApi = 
+
+      axios.create({
+        baseURL: 'https://meowfansub.me/api/',
+        headers: { Authorization: `Bearer ${token}` },
+        params: {}
+      });
 
     React.useEffect( () => {
         meowApi.get( 
@@ -39,7 +55,7 @@ export function HHighlightPanel({ children, onPress }: Props){
               setLoading(false)
             }).catch(console.log);
 
-    }, [])
+    }, [token])
 
   
 

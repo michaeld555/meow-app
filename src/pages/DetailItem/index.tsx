@@ -2,7 +2,7 @@ import { Feather, Foundation, Ionicons } from '@expo/vector-icons';
 import { HBody } from 'components/HBody';
 import { HBottomGradientBackground } from 'components/HBottomGrandientBackground';
 import { HTopGrandientBackground } from 'components/HTopGrandientBackground';
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { styles, SBannerItem, SButtonsContainer, SCircle, SContentItem, SImageBackground, SItemInfo, SMoreOptions, SSubtitle, STitle, ETitle, STitleBadge } from './styles';
 import theme from 'styles/GlobalStyles';
 import { Movie } from 'types/movie.type';
@@ -10,7 +10,7 @@ import { HSimpleList } from 'components/HSimpleList';
 import { HPortraitItem } from 'components/Items/HPortraitItem';
 import { RouterKey } from 'routes/routes-keys';
 import { useNavigation } from '@react-navigation/native';
-import { meowApi } from "../../services/";
+import axios from 'axios';
 import {TouchableOpacity, Alert, Modal, StyleSheet, Text, Pressable, View, Share, BackHandler} from 'react-native';
 import { Episodes } from 'components/Episodes';
 import { PageableTheMovieDb } from "types/global.type";
@@ -19,6 +19,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import { LinearGradient } from 'expo-linear-gradient';
 import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
 import { useIsFocused } from '@react-navigation/native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 
@@ -48,7 +49,32 @@ export function DetailItem({ route }: Props){
     const [modalVisible, setModalVisible] = useState(false);
     const [movies, setMovies] = useState<PageableTheMovieDb<Movie>>(new PageableTheMovieDb());
     const [loading, setLoading] = useState(true);
+    const [token, setToken]: any = useState();
+    const [userId, setUserId]: any = useState();
     const isFocused = useIsFocused();
+
+    React.useEffect(() => {
+        getToken()
+    }, [])
+
+    async function getToken() {
+        try {
+        const jsonValue = await AsyncStorage.getItem('userData')
+        const datae = jsonValue != null ? JSON.parse(jsonValue) : null;
+        setUserId(datae.id)
+        setToken(datae.token)
+        } catch(e) {
+        // error reading value
+        }
+    }
+
+    const meowApi = 
+
+      axios.create({
+        baseURL: 'https://meowfansub.me/api/',
+        headers: { Authorization: `Bearer ${token}` },
+        params: {}
+      });
 
   const onBackPress = useCallback(
         () => {
@@ -73,7 +99,7 @@ export function DetailItem({ route }: Props){
           ).then(function (response: any) {
             setMoreItems(response.data.data)
           }).catch(console.log);
-    }, [id]);
+    }, [id, token]);
 
     React.useEffect( () => {
         setStarRating([white, white, white, white, white])
@@ -86,11 +112,11 @@ export function DetailItem({ route }: Props){
             setMovies(response.data.data[0])
             setLoading(false)
           }).catch(console.log);
-    }, [id]);
+    }, [id, token]);
 
     React.useEffect( () => {
         meowApi.post('mylist', {
-            user_id: 1,
+            user_id: userId,
             title_id: id,
             type: 'is',
           })
@@ -105,7 +131,7 @@ export function DetailItem({ route }: Props){
           .catch(function (error) {
             console.error(error);
           });
-    }, [id]);
+    }, [id, token]);
 
     React.useEffect( () => {
         meowApi.post('avaliation', {
@@ -126,7 +152,7 @@ export function DetailItem({ route }: Props){
           .catch(function (error) {
             console.error(error);
           });
-    }, [id]);
+    }, [id, token]);
 
 
     function getImage(){
@@ -158,7 +184,7 @@ export function DetailItem({ route }: Props){
         if(myList == 'plus'){
 
             meowApi.post('mylist', {
-                user_id: 1,
+                user_id: userId,
                 title_id: id,
                 type: 'add',
               })
@@ -172,7 +198,7 @@ export function DetailItem({ route }: Props){
         } else if(myList == 'check') {
 
             meowApi.post('mylist', {
-                user_id: 1,
+                user_id: userId,
                 title_id: id,
                 type: 'remove',
               })

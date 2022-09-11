@@ -70,7 +70,7 @@ export function HBody({
 
   return (
       <HGradientBackground>
-        <Animated.View style={[{ flex: 1 }, animatedStyles]}>
+        <Animated.View style={[{ flex: 1 }]}>
           {
             showHeader && (
               <HHeader 

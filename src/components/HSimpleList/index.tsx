@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef, useEffect} from "react";
 import { View, FlatList, ListRenderItem } from "react-native";
 import { SContainer, SSubtitleContainer, SSubtitleList, STitleContainer, STitleList } from "./styles";
 
@@ -21,6 +21,13 @@ export function HSimpleList({
     onPressTitle,
     textAlign = 'left'
 }: Props){
+
+    const flatListRef: any = React.useRef()
+
+    useEffect(() => {
+        flatListRef.current.scrollToOffset({ animated: true, offset: 0 })
+    }, [items]);
+
     return (
         <SContainer>
             { !!title && (
@@ -41,6 +48,7 @@ export function HSimpleList({
             <FlatList
                 style={{ marginTop: 8 }}
                 showsHorizontalScrollIndicator={false}
+                ref={flatListRef}
                 data={items}
                 renderItem={renderItem}
                 keyExtractor={(key, index) => index.toString()}

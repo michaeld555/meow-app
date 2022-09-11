@@ -6,12 +6,13 @@ import { SContent, STitle } from "./styles";
 import { PageableTheMovieDb } from "types/global.type";
 import { Movie } from "types/movie.type";
 import { RouterKey } from "routes/routes-keys";
-import { meowApi } from "../../services/";
+import axios from 'axios';
 import { HSquareItem } from 'components/Items/HSquareItem';
 import Lottie from "lottie-react-native";
 import { HPrimaryButton } from 'components/HPrimaryButton';
 import { mylist } from "./styles";
 import { useIsFocused } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -27,7 +28,32 @@ export function MyList({ navigation }: Props) {
     const [loader, setLoader] = useState(true);
     const [response, setResponse] = useState(false);
     const [emptyResponse, setEmptyResponse] = useState(false);
+    const [token, setToken]: any = useState();
+    const [id, setId]: any = useState();
     const isFocused = useIsFocused();
+
+    React.useEffect(() => {
+        getToken()
+    }, [])
+
+    async function getToken() {
+        try {
+        const jsonValue = await AsyncStorage.getItem('userData')
+        const datae = jsonValue != null ? JSON.parse(jsonValue) : null;
+        setId(datae.id)
+        setToken(datae.token)
+        } catch(e) {
+        // error reading value
+        }
+    }
+
+    const meowApi = 
+
+    axios.create({
+        baseURL: 'https://meowfansub.me/api/',
+        headers: { Authorization: `Bearer ${token}` },
+        params: {}
+    });
 
   const onBackPress = useCallback(
         () => {
@@ -55,7 +81,7 @@ export function MyList({ navigation }: Props) {
         setEmptyResponse(false)
 
         meowApi.get( 
-            'mylist/1',
+            `mylist/${id}`,
           ).then(function (response: any) {
             if(response.data.data.length != 0){
                 setMovies(response.data)
@@ -67,7 +93,7 @@ export function MyList({ navigation }: Props) {
             }
           }).catch(console.log);
           
-    }, [isFocused])
+    }, [isFocused, token])
 
     function handleShowDetailItem(id: number){
         navigation.navigate(RouterKey.DetailItemPage, { id });

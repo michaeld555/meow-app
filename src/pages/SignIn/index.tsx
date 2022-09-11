@@ -49,29 +49,6 @@ export function SignInPage({ navigation }: Props) {
     return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
   }, [])
 
-  /* React.useEffect(() => {
-    
-    const backAction = () => {
-      Alert.alert("Não vaii 😭", "Tem certeza que já quer ir embora?", [
-        {
-          text: "Cancelar",
-          onPress: () => null,
-          style: "cancel"
-        },
-        { text: "Sair", onPress: () => BackHandler.exitApp() }
-      ]);
-      return true;
-    };
-
-    BackHandler.removeEventListener('hardwareBackPress', backAction);
-
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => backHandler.remove();
-  }, [isFocused]); */
 
   async function handleSignIn() {
       
@@ -96,8 +73,9 @@ export function SignInPage({ navigation }: Props) {
   function login(date: any){
     setModalHide(false);
     if(date.success == true){
-      saveLogin(date.data.token);
+      saveLogin(date.data);
       navigation.navigate(RouterKey.PrivateRoutes);
+      console.log(date.data)
     }
     else {
       setLoginResponse(true)
