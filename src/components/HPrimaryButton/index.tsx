@@ -1,5 +1,5 @@
 import { TouchableOpacityProps } from "react-native";
-import { SLinearGradient, SText, STouchableOpacity } from "./styles";
+import { SLinearGradient, SText, STouchableOpacity, GTouchableOpacity  } from "./styles";
 import { HLoadingDots } from "components/HLoadingDots";
 
 interface Props extends TouchableOpacityProps {
@@ -18,5 +18,19 @@ export function HPrimaryButton({
                 <SText>{title}</SText>
             </SLinearGradient>
         </STouchableOpacity>
+    )
+}
+
+export function GPrimaryButton({
+    title,
+    width = 200,
+    ...rest
+}: Props){
+    return (
+        <GTouchableOpacity {...rest} style={{ width }}>
+            <SLinearGradient>
+                <SText>{title}</SText>
+            </SLinearGradient>
+        </GTouchableOpacity>
     )
 }

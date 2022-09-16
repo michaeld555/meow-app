@@ -13,6 +13,7 @@ import * as AuthSession from 'expo-auth-session';
 import { LoaderModal } from "components/LoaderModal";
 import { useIsFocused } from '@react-navigation/native';
 import { useBackHandler } from '@react-native-community/hooks'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 interface Props extends StackHeaderProps {
   children: ReactNode;
 }
@@ -25,6 +26,7 @@ export function SignInPage({ navigation }: Props) {
   const [textEmail, setTextEmail] = useState(false);
   const [textPassword, setTextPassword] = useState(false);
   const [modalHide, setModalHide] = useState(false);
+  const [logged, setLogged] = useState(false);
   const isFocused = useIsFocused();
 
   const onBackPress = useCallback(
@@ -48,6 +50,21 @@ export function SignInPage({ navigation }: Props) {
     BackHandler.addEventListener('hardwareBackPress', onBackPress);
     return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
   }, [])
+
+  async function loggedUser() {
+    try {
+      const value = await AsyncStorage.getItem('userData')
+      if(value !== null) { 
+        navigation.navigate(RouterKey.PrivateRoutes);
+      }
+    } catch(e) {
+        console.log(e)
+    }
+  }
+
+  if(isFocused){
+    loggedUser()
+  }
 
 
   async function handleSignIn() {

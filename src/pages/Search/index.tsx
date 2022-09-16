@@ -57,7 +57,7 @@ export function SearchPage({ navigation }: Props) {
   const onBackPress = useCallback(
         () => {
         if(isFocused){
-            navigation.goBack();
+            navigation.navigate(RouterKey.HomePage);
             return true
         }
         return false

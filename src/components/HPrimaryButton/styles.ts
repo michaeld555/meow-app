@@ -32,3 +32,9 @@ export const SText = styled.Text`
     font-weight: 700;
     letter-spacing: 3px;
 `
+
+export const GTouchableOpacity = styled.TouchableOpacity`
+    height: 40px;
+    background-color: red;
+    overflow: hidden;
+`

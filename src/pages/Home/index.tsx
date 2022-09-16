@@ -63,7 +63,7 @@ export function HomePage({ navigation }: Props) {
   const onBackPress = useCallback(
         () => {
         if(isFocused){
-            
+            navigation.navigate(RouterKey.HomePage);
             return true
         }
         return false

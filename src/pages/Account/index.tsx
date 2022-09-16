@@ -21,7 +21,7 @@ export function AccountPage({ navigation }: Props) {
             customHeaderContent={<HHeaderAccount />}
         >
             <SContent>
-            <TouchableOpacity onPress={() => { }} style={styles.buttons}>
+            <TouchableOpacity onPress={() => { navigation.navigate(RouterKey.UserPage) }} style={styles.buttons}>
                 <Ionicons name="person" size={24} color='#fff' />
                 <Text style={{ color: '#fff', fontSize: 20 }}> Sua Conta <Feather style={styles.icon} name="chevron-right" size={20} color={theme.colors.white} /></Text>
             </TouchableOpacity>
