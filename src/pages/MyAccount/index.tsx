@@ -11,6 +11,8 @@ import { Keyboard, BackHandler, Alert } from 'react-native'
 import { LoaderModal } from "components/LoaderModal";
 import { useIsFocused } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props extends StackHeaderProps {
   children: ReactNode;
@@ -20,14 +22,60 @@ export function UserPage({ navigation }: Props) {
 
   const [name, setName] = useState([]);
   const [email, setEmail] = useState([]);
-  const [password, setPassword] = useState([]);
   const [loginResponse, setLoginResponse] = useState(false);
   const [textName, setTextName] = useState(false);
   const [textEmail, setTextEmail] = useState(false);
-  const [textPassword, setTextPassword] = useState(false);
   const [modalHide, setModalHide] = useState(false);
-  const [image, setImage] = useState(`https://uploaddeimagens.com.br/images/004/018/351/full/icon.png?1662944284`);
+  const [image, setImage]: any = useState(`https://uploaddeimagens.com.br/images/004/018/351/full/icon.png?1662944284`);
+  const [imageBase, setImageBase]: any = useState();
+  const [token, setToken]: any = useState();
+  const [userEmail, setUserEmail]: any = useState();
+  const [userName, setUsername]: any = useState();
+  const [userPhoto, setUserPhoto]: any = useState();
+  const [userId, setUserId]: any = useState();
   const isFocused = useIsFocused();
+
+  React.useEffect(() => {
+    getToken()
+  }, [])
+
+  async function getToken() {
+      try {
+      const jsonValue = await AsyncStorage.getItem('userData')
+      const datae = jsonValue != null ? JSON.parse(jsonValue) : null;
+      setToken(datae.token)
+      setUserEmail(datae.email)
+      setUsername(datae.name)
+      setUserId(datae.id)
+      } catch(e) {
+      // error reading value
+      }
+  }
+
+  const meowApi = 
+
+    axios.create({
+        baseURL: 'https://meowfansub.me/api/',
+        headers: { Authorization: `Bearer ${token}` },
+        params: {}
+    });
+
+    React.useEffect(() => {
+        
+      meowApi.get( 
+          `user/${userId}`,
+        ).then(function (response: any) {
+          if(response.data.data.photo_url !== null){
+              setImage(response.data.data.photo_url);
+              //setLoading(false);
+          } else {
+              setUserPhoto(`https://uploaddeimagens.com.br/images/004/018/351/full/icon.png?1662944284`);
+              //setLoading(false);
+          }
+          
+          
+        }).catch(console.log);
+  }, [token, isFocused])
 
   const onBackPress = useCallback(
     () => {
@@ -45,33 +93,33 @@ export function UserPage({ navigation }: Props) {
   }, [])
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      base64: true,
       allowsEditing: true,
       aspect: [3, 3],
       quality: 1,
     });
-    
-    console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
+      setImageBase(result)
     }
   };
 
   async function handleSignIn() {
 
-      fetch('https://meowfansub.me/api/auth/register', {
+      fetch('https://meowfansub.me/api/user/13', {
         method: 'POST',
         body: JSON.stringify({
-          url_image: `${email}`,
+          url_image: `${imageBase.base64}`,
         }),
         headers: {
-          'Content-type': 'application/json'
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token}` 
         }
         })
-          .then((response) => response.json())
+          .then( (response) => response.json() )
           .then(function (json: any) {
             
           })
@@ -127,6 +175,7 @@ export function UserPage({ navigation }: Props) {
             style={styleName}
             placeholder="Nome"
             autoCorrect={false}
+            value={userName}
             onChangeText={(text: any)=> {setName(text), setTextName(false)}}
             />
 
@@ -140,6 +189,7 @@ export function UserPage({ navigation }: Props) {
             style={styleEmail}
             placeholder="Email"
             autoCorrect={false}
+            value={userEmail}
             onChangeText={(text: any)=> {setEmail(text), setTextEmail(false), setLoginResponse(false)}}
             />
 
