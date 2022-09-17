@@ -47,6 +47,7 @@ export function HomePage({ navigation }: Props) {
           const jsonValue = await AsyncStorage.getItem('userData')
           const datae = jsonValue != null ? JSON.parse(jsonValue) : null;
           setToken(datae.token)
+          console.log(datae)
         } catch(e) {
           // error reading value
         }
@@ -76,95 +77,116 @@ export function HomePage({ navigation }: Props) {
     }, [])
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.get( 
               'title?type=forYou',
             ).then(function (response: any) {
               setForYou(response.data.data)
             }).catch(console.log);
-
+        }
     }, [token])
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.get( 
             'title?type=random',
           ).then(function (response: any) {
             setYouLike(response.data.data)
           }).catch(console.log);
+        }
     }, [token]);
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.get( 
             'title?type=recent',
           ).then(function (response: any) {
             setRecent(response.data.data)
           }).catch(console.log);
+        }
     }, [token]);
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.get( 
               'title?type=more_popular',
             ).then(function (response: any) {
                 setMorePopular(response.data.data)
             }).catch(console.log);
+        }
 
     }, [token])
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.get( 
             'title?type=more_week_watched',
           ).then(function (response: any) {
             setMoreWeekWatched(response.data.data)
           }).catch(console.log);
+        }
     }, [token]);
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.get( 
               'title?type=painel',
             ).then(function (response: any) {
               setPainel(response.data.data[0])
             }).catch(console.log);
+        }
 
     }, [token])
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.get( 
             'title?type=more_reviwed',
           ).then(function (response: any) {
             setMoreReviwed(response.data.data)
           }).catch(console.log);
+        }
     }, [token]);////////
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.get( 
             'title?type=random',
           ).then(function (response: any) {
             setMeowIndica(response.data.data)
           }).catch(console.log);
+        }
     }, [token]);
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.get( 
               'title?type=random',
             ).then(function (response: any) {
                 setMovies(response.data.data)
             }).catch(console.log);
+        }
 
     }, [token])
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.get( 
             'title?type=random',
           ).then(function (response: any) {
             setBestWatch(response.data.data)
           }).catch(console.log);
+        }
     }, [token]);
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.get( 
             'title?type=more_reviwed',
           ).then(function (response: any) {
             setCurtas(response.data.data)
           }).catch(console.log);
+        }
     }, [token]);
 
 

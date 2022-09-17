@@ -42,7 +42,7 @@ export function DetailItem({ route }: Props){
     const navigation = useNavigation();
     
 
-    const [item, setItem] = useState<Movie>();
+    const [item, setItem]: any = useState<Movie>();
     const [moreItems, setMoreItems]: any = useState({});
     const [myList, setMyList]: any = useState('plus');
     const [starRating, setStarRating]: any = useState([white, white, white, white, white]);
@@ -94,17 +94,20 @@ export function DetailItem({ route }: Props){
 
     React.useEffect( () => {
         setMoreItems(faker.results)
+        if(token != null){
         meowApi.get( 
             'title?type=random',
           ).then(function (response: any) {
             setMoreItems(response.data.data)
           }).catch(console.log);
+        }
     }, [id, token]);
 
     React.useEffect( () => {
         setStarRating([white, white, white, white, white])
         setLoading(true)
         setMyList('plus')
+        if(token != null){
         meowApi.get( 
             `title/${id}`,
           ).then(function (response: any) {
@@ -112,9 +115,11 @@ export function DetailItem({ route }: Props){
             setMovies(response.data.data[0])
             setLoading(false)
           }).catch(console.log);
+        }
     }, [id, token]);
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.post('mylist', {
             user_id: userId,
             title_id: id,
@@ -131,9 +136,11 @@ export function DetailItem({ route }: Props){
           .catch(function (error) {
             console.error(error);
           });
+        }
     }, [id, token]);
 
     React.useEffect( () => {
+        if(token != null){
         meowApi.post('avaliation', {
             title_id: id,
             type: 'get'
@@ -152,6 +159,7 @@ export function DetailItem({ route }: Props){
           .catch(function (error) {
             console.error(error);
           });
+        }
     }, [id, token]);
 
 
@@ -270,10 +278,10 @@ export function DetailItem({ route }: Props){
                     <SContentItem>
                         <STitle>{getTitle()}</STitle>
                         <SItemInfo>
-                            <SSubtitle>2022</SSubtitle>
-                            <SSubtitle>Série</SSubtitle>
+                            <SSubtitle>{item.year}</SSubtitle>
+                            <SSubtitle>{(item.type_title == 1) ? `Serie` : (item.type_title == 2) ? `Filme` : (item.type_title == 3) ? `Curta` : ``}</SSubtitle>
                             <SSubtitle>Meow Indica</SSubtitle>
-                            <SSubtitle>5.1</SSubtitle>
+                            <SSubtitle>Legendado</SSubtitle>
                         </SItemInfo>                 
                         <SSubtitle style={{ marginTop: 10 }}>{getDescription()}</SSubtitle>
                     </SContentItem>

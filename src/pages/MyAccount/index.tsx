@@ -2,7 +2,7 @@ import { StackHeaderProps } from '@react-navigation/stack';
 import { HGradientBackground } from 'components/HGradientBackground';
 import { HPrimaryButton, GPrimaryButton } from 'components/HPrimaryButton';
 import React, { ReactNode, useState, useCallback } from 'react';
-import { View, TextInput, StyleSheet, Image, TouchableOpacity, Text } from 'react-native';
+import { View, TextInput, StyleSheet, Image, ToastAndroid, Platform, TouchableOpacity, Text } from 'react-native';
 import { RouterKey } from '../../routes/routes-keys';
 import { SContent, styles } from './styles';
 import { saveLogin, getLogin } from '../../services';
@@ -13,6 +13,10 @@ import { useIsFocused } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LinearGradient } from 'expo-linear-gradient';
+import { createShimmerPlaceholder } from 'react-native-shimmer-placeholder'
+
+const ShimmerPlaceHolder = createShimmerPlaceholder(LinearGradient)
 
 interface Props extends StackHeaderProps {
   children: ReactNode;
@@ -20,32 +24,30 @@ interface Props extends StackHeaderProps {
 
 export function UserPage({ navigation }: Props) {
 
-  const [name, setName] = useState([]);
-  const [email, setEmail] = useState([]);
+  const [name, setName]: any = useState();
+  const [email, setEmail]: any= useState();
   const [loginResponse, setLoginResponse] = useState(false);
   const [textName, setTextName] = useState(false);
   const [textEmail, setTextEmail] = useState(false);
   const [modalHide, setModalHide] = useState(false);
-  const [image, setImage]: any = useState(`https://uploaddeimagens.com.br/images/004/018/351/full/icon.png?1662944284`);
-  const [imageBase, setImageBase]: any = useState();
+  const [image, setImage]: any = useState();
+  const [imageBase, setImageBase]: any = useState({base64: null});
   const [token, setToken]: any = useState();
-  const [userEmail, setUserEmail]: any = useState();
-  const [userName, setUsername]: any = useState();
-  const [userPhoto, setUserPhoto]: any = useState();
   const [userId, setUserId]: any = useState();
+  const [loading, setLoading]: any = useState(true);
   const isFocused = useIsFocused();
 
   React.useEffect(() => {
     getToken()
-  }, [])
+  }, [isFocused])
 
   async function getToken() {
       try {
       const jsonValue = await AsyncStorage.getItem('userData')
       const datae = jsonValue != null ? JSON.parse(jsonValue) : null;
       setToken(datae.token)
-      setUserEmail(datae.email)
-      setUsername(datae.name)
+      setEmail(datae.email)
+      setName(datae.name)
       setUserId(datae.id)
       } catch(e) {
       // error reading value
@@ -61,21 +63,23 @@ export function UserPage({ navigation }: Props) {
     });
 
     React.useEffect(() => {
-        
-      meowApi.get( 
+      if(userId != null){
+        meowApi.get( 
           `user/${userId}`,
         ).then(function (response: any) {
           if(response.data.data.photo_url !== null){
               setImage(response.data.data.photo_url);
-              //setLoading(false);
+              setLoading(false);
           } else {
-              setUserPhoto(`https://uploaddeimagens.com.br/images/004/018/351/full/icon.png?1662944284`);
-              //setLoading(false);
+            setImage(`https://uploaddeimagens.com.br/images/004/018/351/full/icon.png?1662944284`);
+              setLoading(false);
           }
           
           
         }).catch(console.log);
-  }, [token, isFocused])
+      }
+      
+  }, [userId, isFocused])
 
   const onBackPress = useCallback(
     () => {
@@ -107,12 +111,26 @@ export function UserPage({ navigation }: Props) {
     }
   };
 
+  async function mergeDate(email: any, name: any) {
+    try {
+      const USER = {
+      name: name,
+      email: email,
+    }
+      await AsyncStorage.mergeItem('userData', JSON.stringify(USER))
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
   async function handleSignIn() {
 
-      fetch('https://meowfansub.me/api/user/13', {
+      fetch(`https://meowfansub.me/api/user/${userId}`, {
         method: 'POST',
         body: JSON.stringify({
           url_image: `${imageBase.base64}`,
+          name: `${name}`,
+          email: `${email}`,
         }),
         headers: {
           'Content-type': 'application/json',
@@ -121,8 +139,15 @@ export function UserPage({ navigation }: Props) {
         })
           .then( (response) => response.json() )
           .then(function (json: any) {
-            
-          })
+            setModalHide(false);
+            mergeDate(email, name);
+            if (Platform.OS === 'android') {
+              ToastAndroid.show('Perfil alterado com Sucesso', ToastAndroid.LONG)
+            }
+          }).catch(() => {
+            setModalHide(false);
+            ToastAndroid.show('Erro ao atualizar Perfil, tente novamente.', ToastAndroid.LONG)
+          });
   }
 
   function validateInputs(){
@@ -153,18 +178,27 @@ export function UserPage({ navigation }: Props) {
         <SContent style={styles.background}>
           <View style={styles.containerImage}>
 
-            <Image
-            style={styles.image}
-            source={{ uri: image }}
-            />
+            { !loading  && 
+              <Image
+              style={styles.image}
+              source={{ uri: image }}
+              />
 
+              
+            }
+
+            { loading  && 
+              <ShimmerPlaceHolder style={styles.image}/>
+            }
+
+            { !loading  &&
             <GPrimaryButton 
             style={styles.btnImage}
             title="ESCOLHER" 
             width={110}
             onPress={ pickImage }
             />
-
+            }
           </View>
           <View style={styles.container}>
 
@@ -175,7 +209,7 @@ export function UserPage({ navigation }: Props) {
             style={styleName}
             placeholder="Nome"
             autoCorrect={false}
-            value={userName}
+            value={name}
             onChangeText={(text: any)=> {setName(text), setTextName(false)}}
             />
 
@@ -189,7 +223,7 @@ export function UserPage({ navigation }: Props) {
             style={styleEmail}
             placeholder="Email"
             autoCorrect={false}
-            value={userEmail}
+            value={email}
             onChangeText={(text: any)=> {setEmail(text), setTextEmail(false), setLoginResponse(false)}}
             />
 

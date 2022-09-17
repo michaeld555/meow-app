@@ -63,7 +63,7 @@ export function RegisterPage({ navigation }: Props) {
   function login(date: any){
     setModalHide(false);
     if(date.success == true){
-      saveLogin(date.data.token);
+      saveLogin(date.data);
       navigation.navigate(RouterKey.PrivateRoutes);
     }
     else {

@@ -29,12 +29,12 @@ export function SearchPage({ navigation }: Props) {
     const [emptyResponse, setEmptyResponse] = useState(false);
     const [searchText, setSearchText] = useState(`Mais procurados`);
     const handler = useCallback(debounce(onChangeTextSearch, 500), []);
-    const [token, setToken]: any = useState();
+    const [token, setToken]: any = useState(`714|h4tfpHVWYZ1VbXOhpyrg0kXVP9zWENyzBv0Divmg`);
     const isFocused = useIsFocused();
 
     React.useEffect(() => {
         getToken()
-    }, [])
+    }, [isFocused])
 
     async function getToken() {
         try {
