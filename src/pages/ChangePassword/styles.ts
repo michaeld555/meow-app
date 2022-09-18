@@ -15,21 +15,9 @@ export const styles = StyleSheet.create({
       justifyContent: 'center',
       marginTop: 150,
     },
-    image:{
-      width: 180,
-      height: 180,
-      marginBottom: 20,
-      borderRadius: 25
-    },
-    container:{
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '90%',
-      marginBottom: 0,
-    },
     input:{
       backgroundColor: '#FFF',
-      width: '90%',
+      width: '85%',
       height: 45,
       marginBottom: 15,
       color: '#222',
@@ -61,14 +49,14 @@ export const styles = StyleSheet.create({
       borderColor: '#FF3D00',
       borderWidth: 1,
     },
-    containerImage:{
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '50%',
-      marginBottom: 30,
+    btn:{
+      marginTop: 200,
     },
-    btnImage:{
-      marginTop: 100,
+    Text:{
+      color: '#FFF',
+      fontSize: 17,
+      width: '85%',
+      marginBottom: 22,
     },
     hText:{
       color: '#FFF',

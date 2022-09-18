@@ -25,8 +25,8 @@ export function AccountPage({ navigation }: Props) {
                 <Ionicons name="person" size={24} color='#fff' />
                 <Text style={{ color: '#fff', fontSize: 20 }}> Sua Conta <Feather style={styles.icon} name="chevron-right" size={20} color={theme.colors.white} /></Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { }} style={styles.buttons}>
-                <Ionicons name="lock-closed-outline" size={24} color='#fff' />
+            <TouchableOpacity onPress={() => { navigation.navigate(RouterKey.ChangePassword) }} style={styles.buttons}>
+                <Ionicons name="lock-closed" size={24} color='#fff' />
                 <Text style={{ color: '#fff', fontSize: 20 }}> Alterar Senha <Feather style={styles.icon} name="chevron-right" size={20} color={theme.colors.white} /></Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => { Linking.openURL('https://t.me/mzd628') }} style={styles.buttons}>

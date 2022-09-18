@@ -6,6 +6,7 @@ import { HSidebarMenu } from 'components/HSidebarMenu';
 import { SettingsPage } from 'pages/Settings';
 import { DetailItem } from 'pages/DetailItem';
 import { UserPage } from 'pages/MyAccount';
+import { ChangePassword } from 'pages/ChangePassword';
 //import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 
 const { Navigator, Screen } = createNativeStackNavigator();
@@ -24,6 +25,7 @@ export function PrivateRoutes() {
         <Screen name={RouterKey.SettingsPage} component={SettingsPage} />
         <Screen name={RouterKey.DetailItemPage} component={DetailItem} />
         <Screen name={RouterKey.UserPage} component={UserPage} />
+        <Screen name={RouterKey.ChangePassword} component={ChangePassword} />
       </Navigator>
     )
 }

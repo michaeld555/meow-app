@@ -10,4 +10,5 @@ export enum RouterKey {
     DetailItemPage = "DetailItem",
     RegisterPage = "RegisterPage",
     UserPage = "UserPage",
+    ChangePassword = "ChangePassword",
 }

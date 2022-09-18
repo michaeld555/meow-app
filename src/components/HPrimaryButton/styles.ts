@@ -38,3 +38,13 @@ export const GTouchableOpacity = styled.TouchableOpacity`
     background-color: red;
     overflow: hidden;
 `
+
+export const CTouchableOpacity = styled.TouchableOpacity`
+    height: 40px;
+    background-color: red;
+    overflow: hidden;
+    border-bottom-end-radius: 10px;
+    border-top-end-radius: 10px;
+    border-bottom-start-radius: 10px;
+    border-top-start-radius: 10px;
+`
